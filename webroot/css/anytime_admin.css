@@ -1,0 +1,415 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root {
+    --primary: #4b286d;
+    --primary-hover: #5d3584;
+    --bg-dark: #0f0f11;
+    --bg-panel: #1a1a1c;
+    --text-light: #f5f5f5;
+    --text-muted: #888;
+    --border-color: #2a2a2c;
+    --success: #2ecc71;
+    --warning: #f1c40f;
+    --danger: #e74c3c;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    height: 100vh;
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-light);
+}
+
+.admin-layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-panel);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-header span {
+    color: var(--text-light);
+}
+
+.sidebar-menu {
+    flex-grow: 1;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+
+.menu-label {
+    padding: 0 20px 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    font-size: 15px;
+    color: #ccc;
+    transition: all 0.3s;
+}
+
+.sidebar-menu a:hover, .sidebar-menu a.active {
+    background: rgba(75, 40, 109, 0.2);
+    color: var(--primary);
+    border-right: 3px solid var(--primary);
+}
+
+.sidebar-menu i {
+    font-size: 20px;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.sidebar-footer a:hover {
+    color: var(--danger);
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.top-bar {
+    height: 70px;
+    background-color: var(--bg-panel);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.dashboard-content {
+    padding: 30px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 28px;
+    margin: 0 0 5px 0;
+}
+
+.page-header p {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Metric Cards */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.metric-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.metric-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.metric-icon.users { background: rgba(46, 204, 113, 0.1); color: var(--success); }
+.metric-icon.sales { background: rgba(75, 40, 109, 0.1); color: var(--primary); }
+.metric-icon.members { background: rgba(241, 196, 15, 0.1); color: var(--warning); }
+.metric-icon.classes { background: rgba(231, 76, 60, 0.1); color: var(--danger); }
+
+.metric-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 24px;
+}
+
+.metric-info p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Quick Actions */
+.quick-actions {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.quick-actions h2 {
+    font-size: 18px;
+    margin: 0 0 20px 0;
+}
+
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 8px;
+    color: var(--text-light);
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.action-btn i {
+    font-size: 24px;
+}
+
+
+/* CakePHP Global CRUD Overrides */
+.content h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--text-light);
+}
+
+.table-responsive {
+    overflow-x: auto;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+table th a {
+    color: var(--primary);
+}
+
+table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Action Buttons for CRUD */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.actions a, .button {
+    background: var(--primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.actions a:nth-child(2) { background: #3498db; }
+.actions a:nth-child(3), form[action*="delete"] button { background: var(--danger); }
+.actions a:hover, .button:hover { filter: brightness(1.2); }
+
+/* Forms */
+.form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.form legend {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.form .input {
+    margin-bottom: 20px;
+}
+
+.form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.form input[type="text"],
+.form input[type="password"],
+.form input[type="number"],
+.form input[type="email"],
+.form textarea,
+.form select {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-light);
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.form input:focus, .form select:focus, .form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* Pagination */
+.paginator {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 5px;
+}
+
+.pagination li a, .pagination li span {
+    padding: 8px 12px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.pagination li.active a {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.pagination li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Flash Messages */
+.message {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.message.success { background: rgba(46, 204, 113, 0.2); color: var(--success); border: 1px solid var(--success); }
+.message.error { background: rgba(231, 76, 60, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+
