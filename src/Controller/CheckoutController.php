@@ -32,8 +32,8 @@ class CheckoutController extends AppController
                 // Create Membership based on BillingCycle
                 $cycle = strtolower((string)$package->BillingCycle);
                 $modifier = '+1 month';
-                if ($cycle == 'year') $modifier = '+1 year';
-                if ($cycle == 'week') $modifier = '+1 week';
+                if ($cycle == 'yearly') $modifier = '+1 year';
+                if ($cycle == 'quarterly') $modifier = '+3 months';
 
                 $membership = $this->fetchTable('Memberships')->newEmptyEntity();
                 $membershipData = [
