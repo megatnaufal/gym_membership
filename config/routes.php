@@ -63,6 +63,10 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/checkout/thank-you', ['controller' => 'Checkout', 'action' => 'thankYou']);
         $builder->connect('/admin', ['controller' => 'Pages', 'action' => 'display', 'admin']);
 
+        $builder->connect('/schedule', ['controller' => 'Schedule', 'action' => 'index']);
+        $builder->connect('/schedule/book/*', ['controller' => 'Schedule', 'action' => 'book']);
+        $builder->connect('/trainer', ['controller' => 'Trainer', 'action' => 'index']);
+
         /*
          * ...and connect the rest of 'Pages' controller's URLs.
          */

@@ -48,18 +48,56 @@ $this->disableAutoLayout();
             $originalPrice = is_numeric($package->Price) ? intval($package->Price * 1.5) : intval((float)str_replace(',', '', $package->Price) * 1.5);
             $isPopular = ($i == 2); // Make the second package "Popular"
             
-            // Generic features since they aren't in the database
-            $features = [
-                '1-on-1 Sessions (' . h($package->BillingCycle) . ')',
-                'Custom Nutrition Plan',
-                '24/7 Gym Access Included',
-                'Weekly Progress Tracking'
-            ];
-            if ($i == 2) {
-                $features[] = 'Priority Trainer Booking';
-            } elseif ($i >= 3) {
-                $features[] = 'Priority Trainer Booking';
-                $features[] = 'Free Monthly InBody Scans';
+            $level = $package->AccessLevel ?? 'Basic';
+            $features = [];
+            
+            if ($level === 'Basic') {
+                $features = [
+                    '24/7 Global Club Access',
+                    'State-of-the-Art Equipment Usage',
+                    'Complimentary Fitness Assessment',
+                    'Access to Anytime Fitness App',
+                    'Locker Room & Premium Showers',
+                    'No Lock-in Contract (Cancel Anytime)'
+                ];
+            } elseif ($level === 'Standard') {
+                $features = [
+                    'Everything in Basic, PLUS:',
+                    'Unlimited Group Classes (HIIT, Yoga, Spin)',
+                    'Pre-booking Priority for Classes',
+                    'Free Monthly Body Composition Scan',
+                    '10% Discount at the Juice Bar',
+                    'Free Anytime Fitness Towel'
+                ];
+            } elseif ($level === 'Premium') {
+                $features = [
+                    'Everything in Standard, PLUS:',
+                    '4x Private 1-on-1 Coaching Sessions',
+                    'Personalized Workout Programming',
+                    'Form Correction & Technique Analysis',
+                    'Direct WhatsApp Support from Trainer',
+                    'Custom Caloric & Macro Goal Setting'
+                ];
+            } elseif ($level === 'VIP') {
+                $features = [
+                    'Everything in Premium, PLUS:',
+                    '8x Private 1-on-1 Coaching Sessions',
+                    'Dedicated Permanent Locker',
+                    'Comprehensive Bi-Weekly Progress Tracking',
+                    'Fully Customized Meal Plan Creation',
+                    'Complimentary Protein Shake Post-Workout'
+                ];
+            } elseif ($level === 'Elite') {
+                $features = [
+                    'The Ultimate VIP Experience:',
+                    '12x Private 1-on-1 Coaching Sessions',
+                    '24/7 On-Call Concierge Trainer Support',
+                    'Advanced Recovery (Massage Passes)',
+                    'Free Anytime Fitness Premium Merch Kit',
+                    'Unlimited VIP Guest Passes (Bring a friend)'
+                ];
+            } else {
+                $features = ['24/7 Premium Gym Access', '1-on-1 Strategy Session'];
             }
         ?>
         <div class="pricing-card <?= $isPopular ? 'popular' : '' ?>">
@@ -76,7 +114,12 @@ $this->disableAutoLayout();
             </div>
             <ul class="plan-features">
                 <?php foreach ($features as $feature): ?>
-                    <li><i class="ph-fill ph-check-circle"></i> <?= $feature ?></li>
+                    <li <?= strpos($feature, 'PLUS:') !== false || strpos($feature, 'Experience:') !== false ? 'style="color: var(--primary); font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;"' : '' ?>>
+                        <?php if (strpos($feature, 'PLUS:') === false && strpos($feature, 'Experience:') === false): ?>
+                            <i class="ph-fill ph-check-circle"></i>
+                        <?php endif; ?>
+                        <?= $feature ?>
+                    </li>
                 <?php endforeach; ?>
             </ul>
             <a href="<?= $this->Url->build(['controller' => 'Checkout', 'action' => 'package', $package->PackageID]) ?>" class="btn btn-primary btn-pricing" <?= !$isPopular ? 'style="background: transparent; border: 2px solid var(--primary);"' : '' ?>>Select Plan</a>

@@ -95,13 +95,22 @@ class Application extends BaseApplication
             // Parse various types of encoded request bodies so that they are
             // available as array through $request->getData()
             // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
-            ->add(new BodyParserMiddleware())
+            ->add(new BodyParserMiddleware());
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
-            // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
+            $csrf = new CsrfProtectionMiddleware([
                 'httponly' => true,
-            ]));
+            ]);
+            
+            // Skip CSRF check for login to prevent session/cookie mismatch errors on dev
+            $csrf->skipCheckCallback(function ($request) {
+                if ($request->getParam('controller') === 'Users' && $request->getParam('action') === 'login') {
+                    return true;
+                }
+                return false;
+            });
+
+            $middlewareQueue->add($csrf);
 
         return $middlewareQueue;
     }

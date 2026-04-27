@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime $EndTime
  * @property int $Capacity
  */
-class Class extends Entity
+class GymClass extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

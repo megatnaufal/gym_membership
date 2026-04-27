@@ -49,4 +49,20 @@ class AppController extends Controller
          */
         //$this->loadComponent('FormProtection');
     }
+
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        
+        $user = $this->getRequest()->getSession()->read('Auth.User');
+        $this->set('authUser', $user);
+        
+        // Protect the /admin dashboard from public access
+        if ($this->request->getParam('action') === 'display' && !empty($this->request->getParam('pass')) && $this->request->getParam('pass')[0] === 'admin') {
+            if (!$user || strtolower($user->Role) !== 'admin') {
+                $this->Flash->error(__('Unauthorized access. Admin portal only.'));
+                return $this->redirect('/users/login');
+            }
+        }
+    }
 }

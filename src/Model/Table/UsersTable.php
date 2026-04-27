@@ -38,8 +38,15 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->setTable('users');
-        $this->setDisplayField('Username');
+        $this->setDisplayField('FullName');
         $this->setPrimaryKey('UserID');
+
+        $this->hasMany('Bookings', [
+            'foreignKey' => 'UserID'
+        ]);
+        $this->hasMany('Classes', [
+            'foreignKey' => 'TrainerUserID'
+        ]);
     }
 
     /**

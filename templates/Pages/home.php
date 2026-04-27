@@ -26,7 +26,22 @@ $this->disableAutoLayout();
             <a href="<?= $this->Url->build('/shop') ?>">Shop</a>
             <a href="<?= $this->Url->build('/') ?>">Why Join</a>
         </div>
-        <a href="<?= $this->Url->build('/') ?>" class="nav-cta">Join Now</a>
+        
+        <div style="display: flex; align-items: center;">
+            <?php if (!empty($authUser)): ?>
+                <?php 
+                    $role = strtolower($authUser->Role);
+                    $dashLink = '/schedule';
+                    if ($role === 'trainer') $dashLink = '/trainer';
+                    if ($role === 'admin') $dashLink = '/admin';
+                ?>
+                <a href="<?= $this->Url->build($dashLink) ?>" class="nav-cta">Dashboard</a>
+                <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); margin-left: 10px;">Logout</a>
+            <?php else: ?>
+                <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); margin-right: 10px;">Login</a>
+                <a href="<?= $this->Url->build('/private-coaching') ?>" class="nav-cta">Join Now</a>
+            <?php endif; ?>
+        </div>
     </nav>
 
     <!-- Hero Section -->

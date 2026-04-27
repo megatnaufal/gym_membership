@@ -40,6 +40,17 @@ class BookingsTable extends Table
         $this->setTable('bookings');
         $this->setDisplayField('BookingID');
         $this->setPrimaryKey('BookingID');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'UserID',
+            'joinType' => 'INNER',
+            'propertyName' => 'member'
+        ]);
+        $this->belongsTo('Classes', [
+            'foreignKey' => 'ClassID',
+            'joinType' => 'INNER',
+            'propertyName' => 'gym_class'
+        ]);
     }
 
     /**

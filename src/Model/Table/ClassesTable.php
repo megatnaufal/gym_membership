@@ -40,6 +40,16 @@ class ClassesTable extends Table
         $this->setTable('classes');
         $this->setDisplayField('ClassName');
         $this->setPrimaryKey('ClassID');
+        $this->setEntityClass('GymClass');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'TrainerUserID',
+            'joinType' => 'INNER',
+            'propertyName' => 'trainer'
+        ]);
+        $this->hasMany('Bookings', [
+            'foreignKey' => 'ClassID'
+        ]);
     }
 
     /**

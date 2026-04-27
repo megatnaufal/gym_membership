@@ -10,6 +10,38 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+    public function login()
+    {
+        $this->viewBuilder()->disableAutoLayout();
+        
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $user = $this->Users->find()
+                ->where(['Username' => $data['Username'], 'Password' => $data['Password']])
+                ->first();
+
+            if ($user) {
+                $this->getRequest()->getSession()->write('Auth.User', $user);
+                
+                $role = strtolower($user->Role);
+                if ($role === 'admin') {
+                    return $this->redirect('/admin');
+                } elseif ($role === 'trainer') {
+                    return $this->redirect('/trainer');
+                } else {
+                    return $this->redirect('/schedule');
+                }
+            }
+            $this->Flash->error(__('Invalid username or password'));
+        }
+    }
+
+    public function logout()
+    {
+        $this->getRequest()->getSession()->delete('Auth.User');
+        return $this->redirect(['action' => 'login']);
+    }
+
     /**
      * Index method
      *
