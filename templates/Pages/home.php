@@ -27,20 +27,9 @@ $this->disableAutoLayout();
             <a href="<?= $this->Url->build('/') ?>">Why Join</a>
         </div>
         
-        <div style="display: flex; align-items: center;">
-            <?php if (!empty($authUser)): ?>
-                <?php 
-                    $role = strtolower($authUser->Role);
-                    $dashLink = '/schedule';
-                    if ($role === 'trainer') $dashLink = '/trainer';
-                    if ($role === 'admin') $dashLink = '/admin';
-                ?>
-                <a href="<?= $this->Url->build($dashLink) ?>" class="nav-cta">Dashboard</a>
-                <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); margin-left: 10px;">Logout</a>
-            <?php else: ?>
-                <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); margin-right: 10px;">Login</a>
-                <a href="<?= $this->Url->build('/private-coaching') ?>" class="nav-cta">Join Now</a>
-            <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2);">Login</a>
+            <a href="<?= $this->Url->build('/private-coaching') ?>" class="nav-cta">Join Now</a>
         </div>
     </nav>
 
@@ -139,5 +128,23 @@ $this->disableAutoLayout();
         <p style="color: #555; font-size: 12px;">© <?= date('Y') ?> Anytime Fitness. All rights reserved. This is a clone for demonstration purposes.</p>
     </footer>
 
+    <script>
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            document.getElementById("profileDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.profile-avatar') && !event.target.closest('.profile-avatar')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>

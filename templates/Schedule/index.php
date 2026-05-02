@@ -71,11 +71,32 @@ $this->disableAutoLayout();
             <a href="<?= $this->Url->build('/schedule') ?>" style="color: var(--primary);">Class Schedule</a>
             <a href="<?= $this->Url->build('/private-coaching') ?>">Private Coaching</a>
         </div>
-        <?php if ($user): ?>
-            <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background: transparent; border: 1px solid white;">Log Out</a>
-        <?php else: ?>
-            <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta">Log In to Book</a>
-        <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <?php if ($user): ?>
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown">
+                    <div class="profile-avatar" onclick="toggleDropdown(event)">
+                        <?= $this->Html->image('default_avatar.png', ['alt' => 'Profile']) ?>
+                    </div>
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <div class="dropdown-header">
+                            <span class="user-name"><?= h($user->FullName ?? 'User') ?></span>
+                            <span class="user-email"><?= h($user->Email ?? '') ?></span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="<?= $this->Url->build('/users/edit/' . ($user->UserID ?? '')) ?>"><i class="ph ph-user"></i> My Profile</a>
+                        <a href="<?= $this->Url->build('/users/change-password') ?>"><i class="ph ph-lock-key"></i> Change Password</a>
+                        <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Class Schedule</a>
+                        <a href="<?= $this->Url->build('/memberships/status') ?>"><i class="ph ph-identification-card"></i> Membership Status</a>
+                        <a href="<?= $this->Url->build('/orders') ?>"><i class="ph ph-shopping-bag"></i> Purchases</a>
+                    </div>
+                </div>
+
+                <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background: transparent; border: 1px solid white;">Log Out</a>
+            <?php else: ?>
+                <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta">Log In to Book</a>
+            <?php endif; ?>
+        </div>
     </nav>
 
     <div class="schedule-container">
@@ -121,5 +142,23 @@ $this->disableAutoLayout();
         <?php endif; ?>
     </div>
 
+    <script>
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            document.getElementById("profileDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.profile-avatar') && !event.target.closest('.profile-avatar')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>

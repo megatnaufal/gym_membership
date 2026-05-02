@@ -39,7 +39,7 @@ class UsersController extends AppController
     public function logout()
     {
         $this->getRequest()->getSession()->delete('Auth.User');
-        return $this->redirect(['action' => 'login']);
+        return $this->redirect('/');
     }
 
     /**
@@ -107,6 +107,47 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
+        $this->set(compact('user'));
+    }
+
+    /**
+     * Change Password method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     */
+    public function changePassword()
+    {
+        $this->viewBuilder()->disableAutoLayout();
+        $userSession = $this->getRequest()->getSession()->read('Auth.User');
+        
+        if (!$userSession) {
+            $this->Flash->error(__('Please log in to change your password.'));
+            return $this->redirect(['action' => 'login']);
+        }
+
+        $user = $this->Users->get($userSession->UserID);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            
+            // Simple password check without hashing for this example (based on the login method)
+            if ($user->Password === $data['current_password']) {
+                if ($data['new_password'] === $data['confirm_password']) {
+                    $user->Password = $data['new_password'];
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success(__('Password changed successfully.'));
+                        $this->getRequest()->getSession()->write('Auth.User', $user);
+                    } else {
+                        $this->Flash->error(__('Could not save new password.'));
+                    }
+                } else {
+                    $this->Flash->error(__('New passwords do not match.'));
+                }
+            } else {
+                $this->Flash->error(__('Current password is incorrect.'));
+            }
+        }
+        
         $this->set(compact('user'));
     }
 
