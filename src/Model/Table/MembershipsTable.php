@@ -40,6 +40,15 @@ class MembershipsTable extends Table
         $this->setTable('memberships');
         $this->setDisplayField('MembershipID');
         $this->setPrimaryKey('MembershipID');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'UserID',
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Packages', [
+            'foreignKey' => 'PackageID',
+            'joinType' => 'INNER',
+        ]);
     }
 
     /**

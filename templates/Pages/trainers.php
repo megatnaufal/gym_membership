@@ -8,7 +8,7 @@ $this->disableAutoLayout();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Our Trainers - Anytime Fitness</title>
     
-    <?= $this->Html->css(['anytime_home', 'anytime_shop']) ?>
+    <?= $this->Html->css(['anytime_home']) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
@@ -21,14 +21,13 @@ $this->disableAutoLayout();
         <div class="nav-links">
             <a href="<?= $this->Url->build('/our-trainers') ?>" style="color: var(--primary);">Our Trainers</a>
             <a href="<?= $this->Url->build('/private-coaching') ?>">Private Coaching</a>
-            <a href="<?= $this->Url->build('/shop') ?>">Shop</a>
             <a href="<?= $this->Url->build('/') ?>">Why Join</a>
         </div>
         <a href="<?= $this->Url->build('/') ?>" class="nav-cta">Join Now</a>
     </nav>
 
     <!-- Header -->
-    <div class="shop-header">
+    <div style="background: linear-gradient(135deg, var(--bg-dark), #2a1440); padding: 80px 50px; text-align: center; border-bottom: 1px solid var(--glass-border);">
         <h1>Meet Our Expert Trainers</h1>
         <p>Dedicated professionals ready to guide you on your judgment-free journey.</p>
     </div>

@@ -61,6 +61,22 @@ class PagesController extends AppController
         }
         $this->set(compact('page', 'subpage'));
 
+        // Inject live stats when displaying the admin dashboard
+        if ($page === 'admin') {
+            $totalUsers        = $this->fetchTable('Users')->find()->count();
+            $activeMemberships = $this->fetchTable('Memberships')->find()
+                ->where(['Status' => 'active'])
+                ->count();
+            $classesToday      = $this->fetchTable('Classes')->find()
+                ->where([
+                    'DATE(StartTime)' => date('Y-m-d'),
+                ])
+                ->count();
+            $totalTrainers     = $this->fetchTable('Trainers')->find()->count();
+
+            $this->set(compact('totalUsers', 'activeMemberships', 'classesToday', 'totalTrainers'));
+        }
+
         try {
             return $this->render(implode('/', $path));
         } catch (MissingTemplateException $exception) {

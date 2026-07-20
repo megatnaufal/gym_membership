@@ -13,7 +13,7 @@ $this->assign('title', 'Dashboard');
             <i class="ph ph-users"></i>
         </div>
         <div class="metric-info">
-            <h3>1,248</h3>
+            <h3><?= h($totalUsers) ?></h3>
             <p>Total Users</p>
         </div>
     </div>
@@ -23,18 +23,8 @@ $this->assign('title', 'Dashboard');
             <i class="ph ph-identification-card"></i>
         </div>
         <div class="metric-info">
-            <h3>982</h3>
+            <h3><?= h($activeMemberships) ?></h3>
             <p>Active Memberships</p>
-        </div>
-    </div>
-    
-    <div class="metric-card">
-        <div class="metric-icon sales">
-            <i class="ph ph-currency-dollar"></i>
-        </div>
-        <div class="metric-info">
-            <h3>$12,450</h3>
-            <p>Shop Sales (MTD)</p>
         </div>
     </div>
     
@@ -43,8 +33,18 @@ $this->assign('title', 'Dashboard');
             <i class="ph ph-calendar-check"></i>
         </div>
         <div class="metric-info">
-            <h3>24</h3>
+            <h3><?= h($classesToday) ?></h3>
             <p>Classes Today</p>
+        </div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-icon trainers" style="background: rgba(155, 89, 182, 0.2); color: #9b59b6;">
+            <i class="ph ph-chalkboard-teacher"></i>
+        </div>
+        <div class="metric-info">
+            <h3><?= h($totalTrainers) ?></h3>
+            <p>Trainers</p>
         </div>
     </div>
 </div>
@@ -57,10 +57,7 @@ $this->assign('title', 'Dashboard');
             <i class="ph ph-user-plus"></i>
             New User
         </a>
-        <a href="<?= $this->Url->build('/products/add') ?>" class="action-btn">
-            <i class="ph ph-package"></i>
-            Add Product
-        </a>
+
         <a href="<?= $this->Url->build('/classes/add') ?>" class="action-btn">
             <i class="ph ph-calendar-plus"></i>
             Schedule Class

@@ -25,7 +25,6 @@ $this->disableAutoLayout();
         <div class="nav-links">
             <a href="<?= $this->Url->build('/our-trainers') ?>">Our Trainers</a>
             <a href="<?= $this->Url->build('/private-coaching') ?>" style="color: var(--primary);">Private Coaching</a>
-            <a href="<?= $this->Url->build('/shop') ?>">Shop</a>
             <a href="<?= $this->Url->build('/') ?>">Why Join</a>
         </div>
         <a href="<?= $this->Url->build('/') ?>" class="nav-cta">Join Now</a>

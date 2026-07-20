@@ -88,7 +88,6 @@ $this->disableAutoLayout();
                         <a href="<?= $this->Url->build('/users/change-password') ?>"><i class="ph ph-lock-key"></i> Change Password</a>
                         <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Class Schedule</a>
                         <a href="<?= $this->Url->build('/memberships/status') ?>"><i class="ph ph-identification-card"></i> Membership Status</a>
-                        <a href="<?= $this->Url->build('/orders') ?>"><i class="ph ph-shopping-bag"></i> Purchases</a>
                     </div>
                 </div>
 

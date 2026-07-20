@@ -39,11 +39,6 @@ $cakeDescription = 'Anytime Admin';
                 <a href="<?= $this->Url->build('/bookings') ?>"><i class="ph ph-address-book"></i> Bookings</a>
                 <a href="<?= $this->Url->build('/trainers') ?>"><i class="ph ph-chalkboard-teacher"></i> Trainers</a>
                 
-                <div class="menu-label" style="margin-top: 20px;">Shop / Store</div>
-                <a href="<?= $this->Url->build('/products') ?>"><i class="ph ph-shopping-bag"></i> Products</a>
-                <a href="<?= $this->Url->build('/orders') ?>"><i class="ph ph-receipt"></i> Orders</a>
-                <a href="<?= $this->Url->build('/order-items') ?>"><i class="ph ph-list-numbers"></i> Order Items</a>
-                
                 <div class="menu-label" style="margin-top: 20px;">System</div>
                 <a href="<?= $this->Url->build('/packages') ?>"><i class="ph ph-package"></i> Packages</a>
             </div>

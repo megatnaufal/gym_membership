@@ -40,6 +40,11 @@ class TrainersTable extends Table
         $this->setTable('trainers');
         $this->setDisplayField('Specialty');
         $this->setPrimaryKey('UserID');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'UserID',
+            'joinType' => 'INNER',
+        ]);
     }
 
     /**

@@ -23,7 +23,6 @@ $this->disableAutoLayout();
         <div class="nav-links">
             <a href="<?= $this->Url->build('/our-trainers') ?>">Our Trainers</a>
             <a href="<?= $this->Url->build('/private-coaching') ?>">Private Coaching</a>
-            <a href="<?= $this->Url->build('/shop') ?>">Shop</a>
             <a href="<?= $this->Url->build('/') ?>">Why Join</a>
         </div>
         
@@ -59,11 +58,7 @@ $this->disableAutoLayout();
                 <p>Achieve your goals faster with our expert private coaches. Get 1-on-1 personalized training plans tailored to you.</p>
             </div>
             
-            <div class="card">
-                <i class="ph ph-storefront card-icon"></i>
-                <h3>Pro Gym Shop</h3>
-                <p>Get all the supplies you need, from premium supplements to top-tier workout gear, right in our integrated online store.</p>
-            </div>
+
             
             <div class="card">
                 <i class="ph ph-clock card-icon"></i>
@@ -107,15 +102,6 @@ $this->disableAutoLayout();
         </div>
     </section>
 
-    <!-- Shop CTA Section -->
-    <section style="padding: 50px 50px 100px; max-width: 1200px; margin: 0 auto; text-align: center;">
-        <div style="background: var(--glass-bg); padding: 60px 40px; border-radius: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(10px);">
-            <i class="ph ph-shopping-bag" style="font-size: 64px; color: var(--primary); margin-bottom: 20px;"></i>
-            <h2 style="font-size: 36px; font-weight: 800; margin-bottom: 20px;">Gear Up for Success</h2>
-            <p style="font-size: 18px; margin-bottom: 40px; color: #ccc; max-width: 600px; margin-left: auto; margin-right: auto;">Visit our shop to find exclusive apparel, premium supplements, and all the essential supplies you need to crush your next workout.</p>
-            <a href="<?= $this->Url->build('/shop') ?>" class="btn btn-primary">Visit Our Shop</a>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer>
