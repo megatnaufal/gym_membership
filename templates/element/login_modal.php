@@ -82,11 +82,119 @@
 
         <p class="lm-footer-text">
             Don't have an account?
-            <a href="<?= $this->Url->build('/users/register') ?>" class="lm-link">Join Now &rarr;</a>
+            <a href="javascript:void(0)" onclick="closeLoginModal(); openRegisterModal();" class="lm-link">Join Now &rarr;</a>
         </p>
     </div>
 </div>
 <!-- =================== END LOGIN MODAL =================== -->
+
+
+<!-- ===================== REGISTER MODAL ===================== -->
+<div id="registerModalOverlay" class="lm-overlay" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
+    <div class="lm-card" id="registerModalCard">
+
+        <!-- Close button -->
+        <button class="lm-close" id="rmCloseBtn" aria-label="Close register modal" onclick="closeRegisterModal()">
+            <i class="ph ph-x"></i>
+        </button>
+
+        <!-- Branding -->
+        <div class="lm-brand">
+            <span class="lm-brand-icon"><i class="ph-fill ph-barbell"></i></span>
+            <span>Anytime<span class="lm-accent">Fitness</span></span>
+        </div>
+
+        <h2 id="rmTitle" class="lm-heading">Create Account</h2>
+
+        <?= $this->Form->create(null, [
+            'url'   => ['controller' => 'Users', 'action' => 'register'],
+            'id'    => 'registerModalForm',
+            'class' => 'lm-form',
+        ]) ?>
+
+        <div class="lm-field">
+            <label class="lm-label" for="rm-fullname">
+                <i class="ph ph-user"></i> Full Name
+            </label>
+            <?= $this->Form->control('FullName', [
+                'label'        => false,
+                'id'           => 'rm-fullname',
+                'class'        => 'lm-input',
+                'required'     => true,
+                'placeholder'  => 'John Doe',
+            ]) ?>
+        </div>
+        
+        <div class="lm-field">
+            <label class="lm-label" for="rm-email">
+                <i class="ph ph-envelope"></i> Email Address
+            </label>
+            <?= $this->Form->control('Email', [
+                'label'        => false,
+                'id'           => 'rm-email',
+                'class'        => 'lm-input',
+                'required'     => true,
+                'type'         => 'email',
+                'placeholder'  => 'john@example.com',
+            ]) ?>
+        </div>
+
+        <div class="lm-field">
+            <label class="lm-label" for="rm-phone">
+                <i class="ph ph-phone"></i> Phone Number (Optional)
+            </label>
+            <?= $this->Form->control('Phone', [
+                'label'        => false,
+                'id'           => 'rm-phone',
+                'class'        => 'lm-input',
+                'placeholder'  => '01X-XXXXXXX',
+                'maxlength'    => 11,
+            ]) ?>
+        </div>
+
+        <div class="lm-field">
+            <label class="lm-label" for="rm-username">
+                <i class="ph ph-user-circle"></i> Username
+            </label>
+            <?= $this->Form->control('Username', [
+                'label'        => false,
+                'id'           => 'rm-username',
+                'class'        => 'lm-input',
+                'required'     => true,
+                'placeholder'  => 'Choose a username',
+            ]) ?>
+        </div>
+
+        <div class="lm-field">
+            <label class="lm-label" for="rm-password">
+                <i class="ph ph-lock"></i> Password
+            </label>
+            <div class="lm-password-wrap">
+                <?= $this->Form->control('Password', [
+                    'type'         => 'password',
+                    'label'        => false,
+                    'id'           => 'rm-password',
+                    'class'        => 'lm-input',
+                    'required'     => true,
+                    'minlength'    => 8,
+                    'placeholder'  => 'Create a strong password',
+                ]) ?>
+            </div>
+        </div>
+
+        <button type="submit" class="lm-btn-submit" id="rmSubmitBtn">
+            <span class="lm-btn-text"><i class="ph ph-user-plus"></i> Sign Up Now</span>
+        </button>
+
+        <?= $this->Form->end() ?>
+        
+        <p class="lm-footer-text">
+            Already have an account?
+            <a href="javascript:void(0)" onclick="closeRegisterModal(); openLoginModal();" class="lm-link">Sign In &rarr;</a>
+        </p>
+    </div>
+</div>
+<!-- =================== END REGISTER MODAL =================== -->
 
 
 <style>
@@ -395,6 +503,46 @@
     /* ── Auto-open if URL has ?login=1 ────────────────── */
     if (window.location.search.indexOf('login=1') !== -1) {
         openLoginModal();
+    }
+    function openRegisterModal() {
+        var overlay = document.getElementById('registerModalOverlay');
+        overlay.classList.add('lm-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeRegisterModal() {
+        var overlay = document.getElementById('registerModalOverlay');
+        overlay.classList.remove('lm-open');
+        document.body.style.overflow = '';
+    }
+
+    window.openRegisterModal  = openRegisterModal;
+    window.closeRegisterModal = closeRegisterModal;
+
+    /* ── Close on backdrop click ──────────────────────── */
+    document.getElementById('registerModalOverlay').addEventListener('click', function (e) {
+        if (e.target === this) closeRegisterModal();
+    });
+
+    /* ── Close on Escape key ──────────────────────────── */
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeRegisterModal();
+    });
+
+    /* ── Loading state on submit ──────────────────────── */
+    var rmForm = document.getElementById('registerModalForm');
+    if(rmForm) {
+        rmForm.addEventListener('submit', function () {
+            var btn    = document.getElementById('rmSubmitBtn');
+            var text   = btn.querySelector('.lm-btn-text');
+            text.innerHTML = '<i class="ph ph-circle-notch lm-spin"></i> Creating account…';
+            btn.disabled = true;
+        });
+    }
+
+    /* ── Auto-open if URL has ?register=1 ────────────────── */
+    if (window.location.search.indexOf('register=1') !== -1) {
+        openRegisterModal();
     }
 })();
 </script>

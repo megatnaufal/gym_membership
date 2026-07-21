@@ -65,8 +65,11 @@ return function (RouteBuilder $routes): void {
 
         $builder->connect('/schedule', ['controller' => 'Schedule', 'action' => 'index']);
         $builder->connect('/schedule/book/*', ['controller' => 'Schedule', 'action' => 'book']);
+        $builder->connect('/schedule/cancel/*', ['controller' => 'Schedule', 'action' => 'cancel']);
+        $builder->connect('/coaching/cancel-lesson/*', ['controller' => 'Packages', 'action' => 'cancelLesson']);
         $builder->connect('/trainer', ['controller' => 'Trainer', 'action' => 'index']);
         $builder->connect('/memberships/status', ['controller' => 'Memberships', 'action' => 'status']);
+        $builder->connect('/dashboard', ['controller' => 'Dashboard', 'action' => 'index']);
 
         /*
          * ...and connect the rest of 'Pages' controller's URLs.

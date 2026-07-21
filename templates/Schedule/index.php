@@ -86,6 +86,20 @@ $this->disableAutoLayout();
             align-items: center;
             gap: 6px;
         }
+        .btn-staff-only {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.04);
+            color: #888;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
         /* Membership banner */
         .membership-banner {
             background: var(--glass-bg);
@@ -198,7 +212,11 @@ $this->disableAutoLayout();
                 </div>
                 
                 <div class="class-actions">
-                    <?php if (!empty($bookedClassIds[$class->ClassID])): ?>
+                    <?php if (isset($user) && strtolower($user->Role ?? $user['Role'] ?? '') === 'trainer'): ?>
+                        <span class="btn-staff-only">
+                            <i class="ph ph-prohibit"></i> Staff — Observer Only
+                        </span>
+                    <?php elseif (!empty($bookedClassIds[$class->ClassID])): ?>
                         <span class="btn-booked">
                             <i class="ph-fill ph-check-circle"></i> Booked
                         </span>
@@ -238,9 +256,6 @@ $this->disableAutoLayout();
         }
     </script>
 
-    <?php if (!$user): ?>
-        <?= $this->element('login_modal') ?>
-    <?php endif; ?>
     <?= $this->element('footer') ?>
 </body>
 </html>

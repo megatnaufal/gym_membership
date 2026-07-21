@@ -98,7 +98,7 @@ $currentAction = $this->request->getParam('action');
 
 <div class="trainer-sidebar">
     <div class="ts-brand">
-        <a href="/">
+        <a href="<?= $this->Url->build('/') ?>">
             <i class="ph-fill ph-barbell" style="color: var(--primary);"></i>
             <div>Anytime<span>Fitness</span></div>
         </a>

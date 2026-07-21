@@ -79,6 +79,12 @@ class ScheduleController extends AppController
             return $this->redirect('/users/login');
         }
 
+        // Trainers are staff — they cannot register as participants in classes
+        if (strtolower($user->Role ?? '') === 'trainer') {
+            $this->Flash->error(__('Staff accounts cannot book member classes.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         $bookingsTable = $this->fetchTable('Bookings');
         
         // Check if already booked
@@ -109,5 +115,34 @@ class ScheduleController extends AppController
         }
         
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function cancel($bookingId = null)
+    {
+        $user = $this->getRequest()->getSession()->read('Auth.User');
+        if (!$user) {
+            $this->Flash->error(__('Please log in.'));
+            return $this->redirect('/');
+        }
+
+        $bookingsTable = $this->fetchTable('Bookings');
+        $booking = $bookingsTable->find()
+            ->where(['BookingID' => $bookingId, 'UserID' => $user->UserID])
+            ->first();
+
+        if (!$booking) {
+            $this->Flash->error(__('Booking not found or you do not have permission to cancel it.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ($bookingsTable->delete($booking)) {
+            $this->Flash->success(__('Your booking has been cancelled successfully.'));
+        } else {
+            $this->Flash->error(__('Could not cancel the booking. Please try again.'));
+        }
+
+        // Redirect back to wherever the request came from
+        $referer = $this->getRequest()->referer();
+        return $this->redirect($referer ?: ['action' => 'index']);
     }
 }

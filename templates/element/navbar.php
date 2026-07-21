@@ -63,13 +63,31 @@ $user = $user ?? $this->request->getSession()->read('Auth.User');
                 </div>
             </div>
         <?php else: ?>
-            <?php if ($active === 'schedule' || $active === 'coaching'): ?>
-                <!-- Directly call login modal from other pages -->
-                <a href="<?= $this->Url->build('/?login=1') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2);">Login</a>
-            <?php else: ?>
-                <button onclick="openLoginModal()" class="nav-cta" id="navLoginBtn" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-family: inherit; font-size: inherit;">Login</button>
-            <?php endif; ?>
-            <a href="<?= $this->Url->build('/private-coaching') ?>" class="nav-cta">Join Now</a>
+            <button onclick="openLoginModal()" class="nav-cta" id="navLoginBtn" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; font-family: inherit; font-size: inherit;">Login</button>
+            <button onclick="openRegisterModal()" class="nav-cta" style="cursor: pointer; font-family: inherit; font-size: inherit; border: none;">Join Now</button>
         <?php endif; ?>
     </div>
 </nav>
+
+<?php if (empty($user)): ?>
+    <?= $this->element('login_modal') ?>
+<?php endif; ?>
+
+<script>
+    function toggleDropdown(event) {
+        event.stopPropagation();
+        document.getElementById("profileDropdown").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.profile-avatar') && !event.target.closest('.profile-avatar')) {
+            var dropdowns = document.getElementsByClassName("dropdown-menu");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>

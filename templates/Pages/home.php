@@ -300,30 +300,30 @@ $this->disableAutoLayout();
         
         <div class="trainer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
             <!-- Trainer 1 -->
-            <div class="trainer-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
-                <?= $this->Html->image('trainer_1.png', ['alt' => 'Trainer 1', 'style' => 'width: 100%; height: 350px; object-fit: cover; border-bottom: 3px solid var(--primary);']) ?>
-                <h3 style="margin: 20px 0 5px; font-size: 24px;">Marcus Vance</h3>
+            <div class="trainer-card" style="display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
+                <?= $this->Html->image('trainer_1.png', ['alt' => 'Trainer 1', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; border-bottom: 3px solid var(--primary);']) ?>
+                <h3 style="margin: 20px 0 5px; font-size: 24px;">Ain Syafinaz</h3>
                 <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">Lead Strength Coach</p>
-                <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Specializes in powerlifting and bodybuilding. Marcus helps you build the ultimate foundation of strength.</p>
-                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
+                <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Specializes in powerlifting and bodybuilding. Ain helps you build the ultimate foundation of strength.</p>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
             
             <!-- Trainer 2 -->
-            <div class="trainer-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
-                <?= $this->Html->image('trainer_2.png', ['alt' => 'Trainer 2', 'style' => 'width: 100%; height: 350px; object-fit: cover; border-bottom: 3px solid var(--primary);']) ?>
-                <h3 style="margin: 20px 0 5px; font-size: 24px;">Sarah Jenkins</h3>
+            <div class="trainer-card" style="display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
+                <?= $this->Html->image('trainer_2.png', ['alt' => 'Trainer 2', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; border-bottom: 3px solid var(--primary);']) ?>
+                <h3 style="margin: 20px 0 5px; font-size: 24px;">Nurliyana Najwa</h3>
                 <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">HIIT &amp; Mobility Specialist</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Focuses on functional fitness, mobility, and high-intensity interval training for maximum fat burn.</p>
-                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
             
             <!-- Trainer 3 -->
-            <div class="trainer-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
-                <?= $this->Html->image('trainer_3.png', ['alt' => 'Trainer 3', 'style' => 'width: 100%; height: 350px; object-fit: cover; border-bottom: 3px solid var(--primary);']) ?>
-                <h3 style="margin: 20px 0 5px; font-size: 24px;">David Chen</h3>
+            <div class="trainer-card" style="display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
+                <?= $this->Html->image('trainer_3.png', ['alt' => 'Trainer 3', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; border-bottom: 3px solid var(--primary);']) ?>
+                <h3 style="margin: 20px 0 5px; font-size: 24px;">Faris Afizuan</h3>
                 <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">Transformation Expert</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Dedicated to complete body transformations through tailored nutrition and strategic training protocols.</p>
-                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
         </div>
     </section>
@@ -331,24 +331,6 @@ $this->disableAutoLayout();
     <!-- Footer -->
     <?= $this->element('footer') ?>
 
-    <script>
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            document.getElementById("profileDropdown").classList.toggle("show");
-        }
-
-        window.onclick = function(event) {
-            if (!event.target.matches('.profile-avatar') && !event.target.closest('.profile-avatar')) {
-                var dropdowns = document.getElementsByClassName("dropdown-menu");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        }
-    </script>
 
     <script>
         // Auto-dismiss flash banners after 5 seconds
@@ -366,7 +348,7 @@ $this->disableAutoLayout();
     </script>
 
     <?php if (empty($user)): ?>
-        <?= $this->element('login_modal') ?>
+        
     <?php endif; ?>
 </body>
 </html>

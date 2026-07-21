@@ -113,6 +113,40 @@ $this->disableAutoLayout();
             margin: 20px auto;
             padding: 0 20px;
         }
+
+        /* Confirmed booking panel */
+        .booked-session {
+            background: rgba(46, 204, 113, 0.07);
+            border: 1px solid rgba(46, 204, 113, 0.25);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .booked-session-icon {
+            font-size: 26px;
+            color: #2ecc71;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .booked-session-info h5 {
+            margin: 0 0 4px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            color: #2ecc71;
+        }
+        .booked-session-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #aaa;
+        }
+        .booked-session-info .dt {
+            font-weight: 700;
+            color: white;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -145,11 +179,45 @@ $this->disableAutoLayout();
                 </div>
                 
                 <?php $dates = $trainerAvailability[$trainer->UserID] ?? []; ?>
-                
+                <?php $myBookings = $memberBookings[$trainer->UserID] ?? []; ?>
+
+                <?php if (!empty($myBookings)): ?>
+                    <?php foreach ($myBookings as $bk): ?>
+                        <?php
+                            $ldt = $bk->LessonDateTime;
+                            if (is_object($ldt) && method_exists($ldt, 'format')) {
+                                $dtFormatted = $ldt->format('D, d M Y');
+                                $tmFormatted = $ldt->format('g:i A');
+                            } else {
+                                $dtFormatted = date('D, d M Y', strtotime((string)$ldt));
+                                $tmFormatted = date('g:i A',    strtotime((string)$ldt));
+                            }
+                        ?>
+                        <div class="booked-session">
+                            <i class="ph-fill ph-check-circle booked-session-icon"></i>
+                            <div class="booked-session-info" style="flex:1;">
+                                <h5><i class="ph ph-calendar-check"></i> Session Confirmed</h5>
+                                <p class="dt"><?= h($dtFormatted) ?></p>
+                                <p><?= h($tmFormatted) ?> &mdash; Status: <strong><?= h($bk->Status) ?></strong></p>
+                            </div>
+                            <a href="<?= $this->Url->build('/coaching/cancel-lesson/' . $bk->LessonID) ?>"
+                               onclick="return confirm('Are you sure you want to cancel this session?')"
+                               style="color:#e74c3c; font-size:12px; font-weight:700; text-decoration:none; align-self:flex-start; padding:4px 10px; border:1px solid rgba(231,76,60,0.3); border-radius:8px; white-space:nowrap;">
+                               <i class="ph ph-x-circle"></i> Cancel
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
                 <?php if (empty($dates)): ?>
                     <div class="no-availability">
                         <i class="ph ph-calendar-x" style="font-size: 32px; margin-bottom: 10px;"></i><br>
                         Currently fully booked. No off-days available in the next 14 days.
+                    </div>
+                <?php elseif (isset($user) && strtolower($user->Role ?? $user['Role'] ?? '') === 'trainer'): ?>
+                    <div class="no-availability" style="border: 1px solid rgba(255,100,100,0.2); background: rgba(255,100,100,0.05);">
+                        <i class="ph ph-prohibit" style="font-size: 32px; margin-bottom: 10px; color: #ff6b6b;"></i><br>
+                        Staff accounts cannot book private 1-on-1 coaching sessions.
                     </div>
                 <?php else: ?>
                     <div class="booking-form">

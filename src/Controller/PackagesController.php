@@ -37,15 +37,23 @@ class PackagesController extends AppController
                 $this->Flash->error(__('Please log in to book a private session.'));
                 return $this->redirect('/?login=1');
             }
+            if ($user && strtolower($user->Role ?? $user['Role'] ?? '') === 'trainer') {
+                $this->Flash->error(__('Staff accounts cannot book private 1-on-1 coaching sessions.'));
+                return $this->redirect(['action' => 'coaching']);
+            }
             
             $data = $this->request->getData();
             $privateLessonsTable = $this->fetchTable('PrivateLessons');
-            $lesson = $privateLessonsTable->newEmptyEntity();
             
-            $lessonDateTime = $data['date'] . ' ' . $data['time'] . ':00';
+            $lessonDateTime = clone (new \DateTime());
+            if (isset($data['date']) && isset($data['time'])) {
+                $lessonDateTime = new \DateTime($data['date'] . ' ' . $data['time'] . ':00');
+            } elseif (isset($data['lesson_date']) && isset($data['lesson_time'])) {
+                $lessonDateTime = new \DateTime($data['lesson_date'] . ' ' . $data['lesson_time']);
+            }
             
-            $lesson = $privateLessonsTable->patchEntity($lesson, [
-                'MemberUserID' => $user->UserID,
+            $lesson = $privateLessonsTable->newEntity([
+                'MemberUserID' => $user->UserID ?? $user['UserID'],
                 'TrainerUserID' => $data['trainer_id'],
                 'LessonDateTime' => $lessonDateTime,
                 'Status' => 'Confirmed'
@@ -93,7 +101,52 @@ class PackagesController extends AppController
             }
         }
 
-        $this->set(compact('trainers', 'trainerAvailability', 'user'));
+        // Fetch the user's upcoming private lessons (keyed by TrainerUserID)
+        $memberBookings = [];
+        if ($user) {
+            $memberUserId = $user->UserID ?? $user['UserID'] ?? null;
+            if ($memberUserId) {
+                $lessons = $this->fetchTable('PrivateLessons')->find()
+                    ->where(['MemberUserID' => $memberUserId, 'Status' => 'Confirmed'])
+                    ->orderBy(['LessonDateTime' => 'ASC'])
+                    ->all();
+                foreach ($lessons as $lesson) {
+                    // Keep ALL bookings per trainer (multiple allowed), but store as array
+                    $memberBookings[$lesson->TrainerUserID][] = $lesson;
+                }
+            }
+        }
+
+        $this->set(compact('trainers', 'trainerAvailability', 'user', 'memberBookings'));
+    }
+
+    public function cancelLesson($lessonId = null)
+    {
+        $user = $this->getRequest()->getSession()->read('Auth.User');
+        if (!$user) {
+            $this->Flash->error(__('Please log in.'));
+            return $this->redirect('/');
+        }
+
+        $lessonsTable = $this->fetchTable('PrivateLessons');
+        $memberId = $user->UserID ?? $user['UserID'];
+        $lesson = $lessonsTable->find()
+            ->where(['LessonID' => $lessonId, 'MemberUserID' => $memberId])
+            ->first();
+
+        if (!$lesson) {
+            $this->Flash->error(__('Session not found or you do not have permission to cancel it.'));
+            return $this->redirect(['action' => 'coaching']);
+        }
+
+        if ($lessonsTable->delete($lesson)) {
+            $this->Flash->success(__('Your 1-on-1 session has been cancelled.'));
+        } else {
+            $this->Flash->error(__('Could not cancel the session. Please try again.'));
+        }
+
+        $referer = $this->getRequest()->referer();
+        return $this->redirect($referer ?: ['action' => 'coaching']);
     }
 
     /**

@@ -374,7 +374,7 @@
     <!-- ═══ LEFT SIDEBAR ═══════════════════════════════════════════ -->
     <aside class="ck-side">
         <div class="brand">
-            <a href="/"><span style="color:white;">Anytime</span><span>Fitness</span></a>
+            <a href="<?= $this->Url->build('/') ?>"><span style="color:white;">Anytime</span><span>Fitness</span></a>
         </div>
 
         <div class="pkg-card">

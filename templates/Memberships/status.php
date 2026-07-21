@@ -194,37 +194,7 @@ if ($membership) {
 <body>
 
 <!-- Navbar -->
-<nav class="navbar" style="background: rgba(15,15,17,0.97); position: sticky; z-index: 100;">
-    <div class="nav-brand" style="font-family: 'Outfit', sans-serif;"><a href="/">Anytime<span>Fitness</span></a></div>
-    <div class="nav-links">
-        <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Schedule</a>
-        <a href="<?= $this->Url->build('/memberships/status') ?>" style="color: var(--primary);"><i class="ph ph-identification-card"></i> Membership</a>
-    </div>
-    <div style="display:flex; align-items:center; gap:15px;">
-        <div class="profile-dropdown">
-            <div class="profile-avatar" onclick="toggleDropdown(event)">
-                <?= $this->Html->image('default_avatar.png', ['alt' => 'Profile']) ?>
-            </div>
-            <div class="dropdown-menu" id="profileDropdown">
-                <div class="dropdown-header">
-                    <span class="user-name"><?= h($user->FullName ?? 'User') ?></span>
-                    <span class="user-email"><?= h($user->Email ?? '') ?></span>
-                </div>
-                <div class="dropdown-divider"></div>
-                <a href="<?= $this->Url->build('/users/edit/' . ($user->UserID ?? '')) ?>"><i class="ph ph-user"></i> My Profile</a>
-                <?php if (strtolower($user->Role ?? '') === 'trainer'): ?>
-                    <a href="<?= $this->Url->build('/trainer') ?>" style="color: #2ecc71;"><i class="ph ph-chalkboard-teacher"></i> Trainer Portal</a>
-                <?php endif; ?>
-                <a href="<?= $this->Url->build('/users/change-password') ?>"><i class="ph ph-lock-key"></i> Change Password</a>
-                <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Class Schedule</a>
-                <a href="<?= $this->Url->build('/memberships/status') ?>"><i class="ph ph-identification-card"></i> Membership Status</a>
-                <div class="dropdown-divider"></div>
-                <a href="<?= $this->Url->build('/users/logout') ?>" style="color:#e74c3c;"><i class="ph ph-sign-out"></i> Log Out</a>
-            </div>
-        </div>
-        <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background:transparent; border:1px solid white;">Log Out</a>
-    </div>
-</nav>
+<?= $this->element('navbar', ['active' => 'membership', 'user' => $user]) ?>
 
 <!-- Page Content -->
 <div class="page-wrapper">
@@ -330,6 +300,7 @@ if ($membership) {
                     <th>Date</th>
                     <th>Time</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -345,6 +316,13 @@ if ($membership) {
                             <span class="pill <?= strtolower($s) === 'waitlisted' ? 'pill-waitlist' : 'pill-booked' ?>">
                                 <?= h($s) ?>
                             </span>
+                        </td>
+                        <td>
+                            <a href="<?= $this->Url->build('/schedule/cancel/' . $booking->BookingID) ?>"
+                               onclick="return confirm('Cancel this booking?')"
+                               style="color:#e74c3c; font-size:13px; font-weight:600; text-decoration:none;">
+                                <i class="ph ph-x-circle"></i> Cancel
+                            </a>
                         </td>
                     </tr>
                     <?php endif; ?>

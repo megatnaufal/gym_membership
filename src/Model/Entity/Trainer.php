@@ -24,6 +24,7 @@ class Trainer extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
+        'UserID' => true,
         'Specialty' => true,
         'Rating' => true,
     ];

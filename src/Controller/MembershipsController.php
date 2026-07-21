@@ -79,6 +79,9 @@ class MembershipsController extends AppController
             ->toArray();
 
         $this->set(compact('user', 'membership', 'bookings'));
+        // activeMembership is used by the shared navbar element to show the badge
+        $activeMembership = $membership;
+        $this->set(compact('activeMembership'));
     }
 
     /**
