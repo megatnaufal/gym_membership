@@ -1,21 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap');
 
 :root {
-    --primary: #4b286d;
-    --primary-hover: #5d3584;
-    --text-light: #f5f5f5;
-    --bg-dark: #0f0f11;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --primary: #8a2be2;
+    --primary-hover: #9b4dca;
+    --secondary: #00d2ff;
+    --text-light: #ffffff;
+    --text-muted: #a0a0b0;
+    --bg-dark: #09090b;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', 'Inter', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-light);
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 a {
@@ -125,25 +129,28 @@ a {
 
 .btn {
     display: inline-block;
-    padding: 15px 40px;
+    padding: 14px 32px;
     border-radius: 50px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
-    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     border: none;
+    text-decoration: none;
 }
 
 .btn-primary {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
 }
 
 .btn-primary:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(75, 40, 109, 0.4);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(138, 43, 226, 0.5);
 }
 
 /* Features Section */
@@ -173,16 +180,20 @@ a {
 .card {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
     padding: 40px 30px;
     text-align: center;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--glass-shadow);
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-15px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(138, 43, 226, 0.2);
 }
 
 .card-icon {
@@ -332,3 +343,62 @@ footer {
     font-size: 18px;
     color: var(--primary);
 }
+
+/* ─── Flash Banners ──────────────────────────────────────────────── */
+.flash-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    animation: flash-slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    cursor: pointer;
+    position: relative;
+}
+
+@keyframes flash-slide-in {
+    from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.flash-success {
+    background: rgba(46, 204, 113, 0.12);
+    border: 1px solid rgba(46, 204, 113, 0.35);
+    color: #2ecc71;
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.1);
+}
+
+.flash-error {
+    background: rgba(231, 76, 60, 0.12);
+    border: 1px solid rgba(231, 76, 60, 0.35);
+    color: #e74c3c;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.1);
+}
+
+.flash-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.flash-msg {
+    flex: 1;
+    line-height: 1.5;
+    color: white;
+}
+
+.flash-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+.flash-close:hover { color: white; }

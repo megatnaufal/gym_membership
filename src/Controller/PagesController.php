@@ -77,6 +77,60 @@ class PagesController extends AppController
             $this->set(compact('totalUsers', 'activeMemberships', 'classesToday', 'totalTrainers'));
         }
 
+        // Inject logged-in user, active membership, booked classes, and pricing packages for the home page
+        if ($page === 'home') {
+            $user = $this->getRequest()->getSession()->read('Auth.User');
+            $myBookings = [];
+            $activeMembership = null;
+
+            $packages = $this->fetchTable('Packages')->find()
+                ->orderBy(['Price' => 'ASC'])
+                ->all()
+                ->toArray();
+
+            if ($user) {
+                $userId = is_object($user) ? $user->UserID : ($user['UserID'] ?? null);
+
+                $myBookings = $this->fetchTable('Bookings')->find()
+                    ->where(['Bookings.UserID' => $userId])
+                    ->contain(['Classes' => ['Users']])
+                    ->orderBy(['Classes.StartTime' => 'ASC'])
+                    ->all()
+                    ->toArray();
+
+                if (strtolower(is_object($user) ? $user->Role : ($user['Role'] ?? '')) === 'trainer') {
+                    $activeMembership = new \App\Model\Entity\Membership([
+                        'Status' => 'Active',
+                        'StartDate' => new \Cake\I18n\FrozenTime(),
+                        'EndDate' => new \Cake\I18n\FrozenTime('+10 years'),
+                        'package' => new \App\Model\Entity\Package([
+                            'PackageName' => 'Staff Access',
+                            'Price' => 0.00
+                        ])
+                    ]);
+                } else {
+                    $activeMembership = $this->fetchTable('Memberships')->find()
+                        ->where([
+                            'Memberships.UserID' => $userId,
+                            'Memberships.Status IN' => ['Active', 'active']
+                        ])
+                        ->contain(['Packages'])
+                        ->orderBy(['Memberships.StartDate' => 'DESC', 'Memberships.MembershipID' => 'DESC'])
+                        ->first();
+
+                    if (!$activeMembership) {
+                        $activeMembership = $this->fetchTable('Memberships')->find()
+                            ->where(['Memberships.UserID' => $userId])
+                            ->contain(['Packages'])
+                            ->orderBy(['Memberships.StartDate' => 'DESC', 'Memberships.MembershipID' => 'DESC'])
+                            ->first();
+                    }
+                }
+            }
+
+            $this->set(compact('user', 'myBookings', 'activeMembership', 'packages'));
+        }
+
         try {
             return $this->render(implode('/', $path));
         } catch (MissingTemplateException $exception) {

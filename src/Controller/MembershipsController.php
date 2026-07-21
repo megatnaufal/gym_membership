@@ -24,6 +24,64 @@ class MembershipsController extends AppController
     }
 
     /**
+     * Status method — shows the current user's membership status
+     *
+     * @return \Cake\Http\Response|null|void
+     */
+    public function status()
+    {
+        $this->viewBuilder()->disableAutoLayout();
+
+        $user = $this->getRequest()->getSession()->read('Auth.User');
+        if (!$user) {
+            $this->Flash->error(__('Please log in to view your membership status.'));
+            return $this->redirect('/users/login');
+        }
+
+        $userId = is_object($user) ? $user->UserID : ($user['UserID'] ?? null);
+
+        if (strtolower($user->Role ?? '') === 'trainer') {
+            $membership = new \App\Model\Entity\Membership([
+                'Status' => 'Active',
+                'StartDate' => new \Cake\I18n\FrozenTime(),
+                'EndDate' => new \Cake\I18n\FrozenTime('+10 years'),
+                'package' => new \App\Model\Entity\Package([
+                    'PackageName' => 'Staff Access',
+                    'Price' => 0.00
+                ])
+            ]);
+        } else {
+            // Fetch active membership first, falling back to latest membership record
+            $membership = $this->Memberships->find()
+                ->where([
+                    'Memberships.UserID' => $userId,
+                    'Memberships.Status IN' => ['Active', 'active']
+                ])
+                ->contain(['Packages'])
+                ->orderBy(['Memberships.StartDate' => 'DESC', 'Memberships.MembershipID' => 'DESC'])
+                ->first();
+
+            if (!$membership) {
+                $membership = $this->Memberships->find()
+                    ->where(['Memberships.UserID' => $userId])
+                    ->contain(['Packages'])
+                    ->orderBy(['Memberships.StartDate' => 'DESC', 'Memberships.MembershipID' => 'DESC'])
+                    ->first();
+            }
+        }
+
+        // Also fetch all bookings for this user with class details
+        $bookings = $this->fetchTable('Bookings')->find()
+            ->where(['Bookings.UserID' => $userId])
+            ->contain(['Classes'])
+            ->orderBy(['Classes.StartTime' => 'ASC'])
+            ->all()
+            ->toArray();
+
+        $this->set(compact('user', 'membership', 'bookings'));
+    }
+
+    /**
      * View method
      *
      * @param string|null $id Membership id.

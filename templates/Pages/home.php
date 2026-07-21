@@ -12,38 +12,200 @@ $this->disableAutoLayout();
     
     <!-- Using Phosphor Icons for modern premium icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* My Classes Section */
+        .my-classes-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 50px;
+        }
+        .my-classes-section .section-title { margin-bottom: 30px; }
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .class-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .class-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+        .class-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+        .class-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+        .class-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            color: #aaa;
+        }
+        .class-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .class-meta i { color: var(--primary); font-size: 15px; }
+        .status-badge {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-booked   { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+        .status-waitlist { background: rgba(231,76,60,0.15);  color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); }
+        .no-classes-box {
+            background: var(--glass-bg);
+            border: 1px dashed var(--glass-border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            color: #666;
+        }
+        .no-classes-box i { font-size: 40px; margin-bottom: 12px; display: block; color: #444; }
+    </style>
 </head>
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-brand">
-            <a href="/">Anytime<span>Fitness</span></a>
+    <?= $this->element('navbar', ['active' => 'home']) ?>
+
+    <!-- Flash notification bar — fixed at top, auto-dismisses -->
+    <div id="flashZone" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 700px; z-index: 1100; padding: 0 20px; pointer-events: none;">
+        <div style="pointer-events: all;">
+            <?= $this->Flash->render() ?>
         </div>
-        <div class="nav-links">
-            <a href="<?= $this->Url->build('/our-trainers') ?>">Our Trainers</a>
-            <a href="<?= $this->Url->build('/private-coaching') ?>">Private Coaching</a>
-            <a href="<?= $this->Url->build('/') ?>">Why Join</a>
-        </div>
-        
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta" style="background: transparent; border: 1px solid rgba(255,255,255,0.2);">Login</a>
-            <a href="<?= $this->Url->build('/private-coaching') ?>" class="nav-cta">Join Now</a>
-        </div>
-    </nav>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Your Judgment-Free Fitness Journey</h1>
-            <p>Find a welcoming community where you can train in peace without facing the judgment of others. Get access to state-of-the-art facilities, private coaching, and premium supplies.</p>
-            <a href="#trainers" class="btn btn-primary">Meet Our Trainers</a>
+            <?php if (!empty($user)): ?>
+                <h1>Welcome Back, <?= h(explode(' ', $user->FullName)[0]) ?>!</h1>
+                
+                <?php if (!empty($activeMembership) && strtolower($activeMembership->Status ?? '') === 'active'): ?>
+                    <div style="margin: 18px 0 24px; background: rgba(0, 210, 255, 0.15); border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 14px; padding: 16px 24px; display: inline-flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); text-align: left; box-shadow: 0 4px 20px rgba(0,210,255,0.2);">
+                        <i class="ph-fill ph-shield-check" style="font-size: 32px; color: var(--secondary);"></i>
+                        <div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); font-weight: 700; font-family: 'Outfit', sans-serif;">Active Membership</div>
+                            <div style="font-size: 17px; font-weight: 700; color: white; font-family: 'Outfit', sans-serif;">
+                                <?= h($activeMembership->package->PackageName ?? 'Gym Pass') ?>
+                            </div>
+                            <div style="font-size: 12px; color: #bbb; margin-top: 2px;">
+                                Valid until <strong><?= h($activeMembership->EndDate->format('d M Y')) ?></strong>
+                            </div>
+                        </div>
+                        <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn" style="margin-left: 12px; background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 16px; font-size: 13px; text-decoration: none; font-weight: 600;">
+                            Manage
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div style="margin: 18px 0 24px; background: rgba(231, 76, 60, 0.15); border: 1px solid rgba(231, 76, 60, 0.4); border-radius: 14px; padding: 16px 24px; display: inline-flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); text-align: left;">
+                        <i class="ph-fill ph-warning-circle" style="font-size: 32px; color: #e74c3c;"></i>
+                        <div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #e74c3c; font-weight: 700;">No Active Membership</div>
+                            <div style="font-size: 14px; color: white;">Join a membership plan to unlock 24/7 access & class bookings.</div>
+                        </div>
+                        <a href="#pricing" class="btn btn-primary" style="margin-left: 12px; padding: 8px 16px; font-size: 13px; text-decoration: none; font-weight: 600;">
+                            Get Access
+                        </a>
+                    </div>
+                <?php endif; ?>
+
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary">View Class Schedule</a>
+                    <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white;">Digital Pass & Status</a>
+                </div>
+            <?php else: ?>
+                <h1 style="font-family: 'Outfit', sans-serif;">Elevate Your Fitness Journey</h1>
+                <p>Experience a premium, judgment-free environment designed for your success. State-of-the-art facilities, expert coaching, and a thriving community await.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                    <a href="#pricing" class="btn btn-primary">Join Now</a>
+                    <a href="#trainers" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Meet Trainers</a>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 
+    <!-- MY CLASSES SECTION (only shown when logged in) -->
+    <?php if (!empty($user)): ?>
+    <section class="my-classes-section">
+        <h2 class="section-title">My <span>Booked Classes</span></h2>
+
+        <?php if (!empty($myBookings)): ?>
+            <div class="classes-grid">
+                <?php foreach ($myBookings as $booking): ?>
+                    <?php $class = $booking->gym_class ?? $booking->_matchingData['Classes'] ?? null; ?>
+                    <?php if ($class): ?>
+                    <div class="class-card">
+                        <h4><?= h($class->ClassName) ?></h4>
+                        <div class="class-meta">
+                            <span>
+                                <i class="ph ph-calendar"></i>
+                                <?= h($class->StartTime->format('D, d M Y')) ?>
+                            </span>
+                            <span>
+                                <i class="ph ph-clock"></i>
+                                <?= h($class->StartTime->format('h:i A')) ?> – <?= h($class->EndTime->format('h:i A')) ?>
+                            </span>
+                            <?php if (!empty($class->trainer)): ?>
+                            <span>
+                                <i class="ph ph-chalkboard-teacher"></i>
+                                <?= h($class->trainer->FullName) ?>
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                        <?php
+                            $status = $booking->AttendanceStatus ?? 'Booked';
+                            $badgeClass = strtolower($status) === 'waitlisted' ? 'status-waitlist' : 'status-booked';
+                        ?>
+                        <span class="status-badge <?= $badgeClass ?>"><?= h($status) ?></span>
+                    </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary">
+                    <i class="ph ph-plus"></i> Book More Classes
+                </a>
+            </div>
+        <?php else: ?>
+            <div class="no-classes-box">
+                <i class="ph ph-calendar-x"></i>
+                <p style="font-size: 16px; margin-bottom: 16px;">You have not booked any classes yet.</p>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary">Browse Classes</a>
+            </div>
+        <?php endif; ?>
+    </section>
+    <?php endif; ?>
+
     <!-- Features Section -->
-    <section class="features">
-        <h2 class="section-title">Everything You <span>Need</span></h2>
+    <section id="about" class="features" style="padding: 100px 50px;">
+        <h2 class="section-title" style="font-family: 'Outfit', sans-serif;">Everything You <span>Need</span></h2>
         
         <div class="grid">
             <div class="card">
@@ -57,14 +219,78 @@ $this->disableAutoLayout();
                 <h3>Private Coaching</h3>
                 <p>Achieve your goals faster with our expert private coaches. Get 1-on-1 personalized training plans tailored to you.</p>
             </div>
-            
 
-            
             <div class="card">
                 <i class="ph ph-clock card-icon"></i>
                 <h3>24/7 Access</h3>
                 <p>Our doors are never closed. Work out whenever you want, day or night, with our secure key fob access.</p>
             </div>
+        </div>
+    <!-- Membership Plans & Pricing Section -->
+    <section id="pricing" class="pricing-section" style="padding: 80px 50px 40px; max-width: 1200px; margin: 0 auto;">
+        <h2 class="section-title">Membership <span>Plans &amp; Access</span></h2>
+        <p style="text-align: center; color: #aaa; margin-top: -30px; margin-bottom: 50px; font-size: 16px;">
+            Choose the membership tier that fits your fitness journey. Instant key fob access included.
+        </p>
+
+        <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
+            <?php if (!empty($packages)): ?>
+                <?php foreach ($packages as $pkg): ?>
+                    <?php 
+                        $isBasic = strtolower($pkg->PackageName ?? '') === 'basic gym access';
+                        $isPopular = strtolower($pkg->PackageName ?? '') === 'unlimited group classes';
+                    ?>
+                    <div class="pricing-card" style="background: var(--glass-bg); border: 1px solid <?= $isPopular ? 'var(--primary)' : 'var(--glass-border)' ?>; border-radius: 24px; padding: 40px 30px; position: relative; display: flex; flex-direction: column; backdrop-filter: blur(16px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: <?= $isPopular ? '0 10px 40px rgba(138,43,226,0.2)' : 'var(--glass-shadow)' ?>;">
+                        
+                        <?php if ($isPopular): ?>
+                            <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 6px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(138,43,226,0.4);">
+                                Most Popular
+                            </div>
+                        <?php elseif ($isBasic): ?>
+                            <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #3498db; color: white; padding: 4px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;">
+                                Essential Pass
+                            </div>
+                        <?php endif; ?>
+
+                        <h3 style="font-size: 22px; margin-bottom: 12px; color: white;"><?= h($pkg->PackageName) ?></h3>
+                        <div style="font-size: 38px; font-weight: 800; color: white; margin-bottom: 20px; display: flex; align-items: baseline; gap: 4px;">
+                            <span style="font-size: 18px; color: var(--primary);">RM</span><?= h($pkg->Price) ?>
+                            <span style="font-size: 13px; color: #888; font-weight: normal;">/<?= h(strtolower($pkg->BillingCycle)) ?></span>
+                        </div>
+
+                        <ul style="list-style: none; padding: 0; margin: 0 0 30px; flex-grow: 1;">
+                            <?php if ($isBasic): ?>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: #3498db;"></i> 24/7 Unlimited Gym Access
+                                </li>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: #3498db;"></i> All Strength &amp; Cardio Equipment
+                                </li>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: #3498db;"></i> Locker Room &amp; Hot Showers
+                                </li>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: #3498db;"></i> Digital Pass &amp; Check-in App
+                                </li>
+                            <?php else: ?>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: var(--primary);"></i> 24/7 Global Club Access
+                                </li>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: var(--primary);"></i> Unlimited Fitness Classes
+                                </li>
+                                <li style="margin-bottom: 12px; color: #ccc; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="ph-fill ph-check-circle" style="color: var(--primary);"></i> Personal Coach Consultation
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+
+                        <a href="<?= $this->Url->build(['controller' => 'Checkout', 'action' => 'package', $pkg->PackageID]) ?>" class="btn btn-primary" style="text-align: center; display: block; padding: 12px; width: 100%; text-decoration: none; <?= !$isPopular && !$isBasic ? 'background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);' : '' ?>">
+                            Get <?= h($pkg->PackageName) ?>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -79,16 +305,16 @@ $this->disableAutoLayout();
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Marcus Vance</h3>
                 <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">Lead Strength Coach</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Specializes in powerlifting and bodybuilding. Marcus helps you build the ultimate foundation of strength.</p>
-                <a href="<?= $this->Url->build('/') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
             </div>
             
             <!-- Trainer 2 -->
             <div class="trainer-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
                 <?= $this->Html->image('trainer_2.png', ['alt' => 'Trainer 2', 'style' => 'width: 100%; height: 350px; object-fit: cover; border-bottom: 3px solid var(--primary);']) ?>
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Sarah Jenkins</h3>
-                <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">HIIT & Mobility Specialist</p>
+                <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">HIIT &amp; Mobility Specialist</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Focuses on functional fitness, mobility, and high-intensity interval training for maximum fat burn.</p>
-                <a href="<?= $this->Url->build('/') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
             </div>
             
             <!-- Trainer 3 -->
@@ -97,22 +323,13 @@ $this->disableAutoLayout();
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">David Chen</h3>
                 <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">Transformation Expert</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Dedicated to complete body transformations through tailored nutrition and strategic training protocols.</p>
-                <a href="<?= $this->Url->build('/') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: 10px;">Book Session</a>
             </div>
         </div>
     </section>
 
-
     <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="#">Careers</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms & Conditions</a>
-            <a href="#">Contact Us</a>
-        </div>
-        <p style="color: #555; font-size: 12px;">© <?= date('Y') ?> Anytime Fitness. All rights reserved. This is a clone for demonstration purposes.</p>
-    </footer>
+    <?= $this->element('footer') ?>
 
     <script>
         function toggleDropdown(event) {
@@ -132,5 +349,24 @@ $this->disableAutoLayout();
             }
         }
     </script>
+
+    <script>
+        // Auto-dismiss flash banners after 5 seconds
+        document.addEventListener('DOMContentLoaded', function () {
+            var banners = document.querySelectorAll('.flash-banner');
+            banners.forEach(function (banner) {
+                setTimeout(function () {
+                    banner.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    banner.style.opacity = '0';
+                    banner.style.transform = 'translateY(-10px)';
+                    setTimeout(function () { banner.style.display = 'none'; }, 600);
+                }, 5000);
+            });
+        });
+    </script>
+
+    <?php if (empty($user)): ?>
+        <?= $this->element('login_modal') ?>
+    <?php endif; ?>
 </body>
 </html>

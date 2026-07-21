@@ -60,11 +60,13 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/private-coaching', ['controller' => 'Packages', 'action' => 'coaching']);
         $builder->connect('/checkout/package/*', ['controller' => 'Checkout', 'action' => 'package']);
         $builder->connect('/checkout/thank-you', ['controller' => 'Checkout', 'action' => 'thankYou']);
+        $builder->connect('/checkout/invoice', ['controller' => 'Checkout', 'action' => 'invoice']);
         $builder->connect('/admin', ['controller' => 'Pages', 'action' => 'display', 'admin']);
 
         $builder->connect('/schedule', ['controller' => 'Schedule', 'action' => 'index']);
         $builder->connect('/schedule/book/*', ['controller' => 'Schedule', 'action' => 'book']);
         $builder->connect('/trainer', ['controller' => 'Trainer', 'action' => 'index']);
+        $builder->connect('/memberships/status', ['controller' => 'Memberships', 'action' => 'status']);
 
         /*
          * ...and connect the rest of 'Pages' controller's URLs.

@@ -102,9 +102,16 @@ class Application extends BaseApplication
                 'httponly' => true,
             ]);
             
-            // Skip CSRF check for login to prevent session/cookie mismatch errors on dev
+            // Skip CSRF check for specific controllers
             $csrf->skipCheckCallback(function ($request) {
-                if ($request->getParam('controller') === 'Users' && $request->getParam('action') === 'login') {
+                $controller = $request->getParam('controller');
+                $action      = $request->getParam('action');
+                // Login: skip to avoid session/cookie mismatch
+                if ($controller === 'Users' && $action === 'login') {
+                    return true;
+                }
+                // Checkout: plain HTML form, CSRF already protected by session auth
+                if ($controller === 'Checkout') {
                     return true;
                 }
                 return false;

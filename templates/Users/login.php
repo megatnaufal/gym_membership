@@ -7,57 +7,84 @@ $this->disableAutoLayout();
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Anytime Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
     <style>
         body {
             background: var(--bg-dark);
+            background-image: radial-gradient(circle at top right, rgba(138,43,226,0.15) 0%, transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(0,210,255,0.1) 0%, transparent 40%);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             color: white;
+            font-family: 'Inter', sans-serif;
         }
         .login-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 50px 40px;
             width: 100%;
             max-width: 450px;
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: var(--glass-shadow);
         }
         .login-card h2 {
             margin-bottom: 30px;
             text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
         }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
             color: white;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 0 3px rgba(138,43,226,0.2);
         }
         .btn-login {
             width: 100%;
-            padding: 15px;
-            background: var(--primary);
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 12px;
+            font-weight: 700;
             font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(138,43,226,0.3);
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(138,43,226,0.5);
         }
     </style>
 </head>
 <body>
     <div class="login-card">
         <div style="text-align: center; margin-bottom: 20px;">
-            <a href="/" style="font-size: 24px; font-weight: bold; color: white; text-decoration: none;">Anytime<span style="color: var(--primary);">Fitness</span></a>
+            <a href="/" style="font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: white; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;">Anytime<span style="color: var(--primary);">Fitness</span></a>
         </div>
         
         <h2>Sign In</h2>

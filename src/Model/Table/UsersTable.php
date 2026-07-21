@@ -85,7 +85,7 @@ class UsersTable extends Table
 
         $validator
             ->scalar('Phone')
-            ->maxLength('Phone', 20)
+            ->maxLength('Phone', 11, 'Phone number cannot exceed 11 characters.')
             ->allowEmptyString('Phone');
 
         $validator
@@ -105,8 +105,14 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['Username']), ['errorField' => 'Username']);
-        $rules->add($rules->isUnique(['Email']), ['errorField' => 'Email']);
+        $rules->add($rules->isUnique(['Username']), [
+            'errorField' => 'Username',
+            'message' => 'This username is already taken. Please choose another one.'
+        ]);
+        $rules->add($rules->isUnique(['Email']), [
+            'errorField' => 'Email',
+            'message' => 'This email address is already registered. Please use a different email or log in.'
+        ]);
 
         return $rules;
     }

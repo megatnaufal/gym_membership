@@ -7,6 +7,7 @@ $this->disableAutoLayout();
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Class Schedule - Anytime Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -18,15 +19,23 @@ $this->disableAutoLayout();
         .class-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease;
         }
-        .class-info h3 { margin: 0 0 5px 0; color: white; }
+        .class-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .class-info h3 { margin: 0 0 5px 0; color: white; font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 600; }
         .class-details { color: #aaa; font-size: 14px; display: flex; gap: 20px; margin-top: 10px; }
         .class-details div { display: flex; align-items: center; gap: 5px; }
         .class-details i { color: var(--primary); }
@@ -46,63 +55,128 @@ $this->disableAutoLayout();
         .capacity-fill.full { background: #e74c3c; }
         
         .btn-book {
-            padding: 12px 24px;
-            background: var(--primary);
+            padding: 12px 28px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
         }
-        .btn-book:hover { background: #5c35b1; color: white; }
+        .btn-book:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(138,43,226,0.4); color: white; }
         .btn-waitlist {
             background: transparent;
             border: 2px solid #e74c3c;
             color: #e74c3c;
         }
         .btn-waitlist:hover { background: rgba(231, 76, 60, 0.1); color: #e74c3c; }
+        .btn-booked {
+            padding: 12px 24px;
+            background: rgba(46, 204, 113, 0.12);
+            color: #2ecc71;
+            border: 2px solid rgba(46, 204, 113, 0.35);
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* Membership banner */
+        .membership-banner {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--glass-shadow);
+        }
+        .membership-banner.expired { border-color: rgba(231,76,60,0.4); }
+        .banner-info { display: flex; align-items: center; gap: 14px; }
+        .banner-icon { font-size: 28px; }
+        .banner-text h4 { font-size: 15px; font-weight: 700; margin: 0 0 4px; color: white; }
+        .banner-text p  { font-size: 13px; color: #888; margin: 0; }
+        .banner-pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pill-active   { background: rgba(46,204,113,.15); color: #2ecc71; }
+        .pill-expired  { background: rgba(231,76,60,.15);  color: #e74c3c; }
+        .pill-none     { background: rgba(189,195,199,.1); color: #888; }
     </style>
 </head>
 <body style="background: var(--bg-dark); color: white;">
 
-    <nav class="navbar" style="background: rgba(15, 15, 17, 0.95); position: sticky; z-index: 100;">
-        <div class="nav-brand"><a href="/">Anytime<span>Fitness</span></a></div>
-        <div class="nav-links">
-            <a href="<?= $this->Url->build('/schedule') ?>" style="color: var(--primary);">Class Schedule</a>
-            <a href="<?= $this->Url->build('/private-coaching') ?>">Private Coaching</a>
-        </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <?php if ($user): ?>
-                <!-- Profile Dropdown -->
-                <div class="profile-dropdown">
-                    <div class="profile-avatar" onclick="toggleDropdown(event)">
-                        <?= $this->Html->image('default_avatar.png', ['alt' => 'Profile']) ?>
-                    </div>
-                    <div class="dropdown-menu" id="profileDropdown">
-                        <div class="dropdown-header">
-                            <span class="user-name"><?= h($user->FullName ?? 'User') ?></span>
-                            <span class="user-email"><?= h($user->Email ?? '') ?></span>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <a href="<?= $this->Url->build('/users/edit/' . ($user->UserID ?? '')) ?>"><i class="ph ph-user"></i> My Profile</a>
-                        <a href="<?= $this->Url->build('/users/change-password') ?>"><i class="ph ph-lock-key"></i> Change Password</a>
-                        <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Class Schedule</a>
-                        <a href="<?= $this->Url->build('/memberships/status') ?>"><i class="ph ph-identification-card"></i> Membership Status</a>
-                    </div>
-                </div>
-
-                <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background: transparent; border: 1px solid white;">Log Out</a>
-            <?php else: ?>
-                <a href="<?= $this->Url->build('/users/login') ?>" class="nav-cta">Log In to Book</a>
-            <?php endif; ?>
-        </div>
-    </nav>
+    <?= $this->element('navbar', ['active' => 'schedule']) ?>
 
     <div class="schedule-container">
         <?= $this->Flash->render() ?>
-        
-        <h1 style="margin-bottom: 10px;">Upcoming Classes</h1>
-        <p style="color: #aaa; margin-bottom: 40px;">Reserve your spot in our premium group sessions.</p>
+
+        <h1 style="margin-bottom: 10px; font-family: 'Outfit', sans-serif; font-weight: 700;">Upcoming Classes</h1>
+        <p style="color: #aaa; margin-bottom: 30px; font-family: 'Inter', sans-serif;">Reserve your spot in our premium group sessions.</p>
+
+        <?php if ($user && $membershipStatus): ?>
+            <?php
+                $today     = new \DateTime();
+                $endDate   = $membershipStatus->EndDate->toNative();
+                $expired   = $today > $endDate;
+                $daysLeft  = $expired ? 0 : (int)$today->diff($endDate)->days;
+                $mStatus   = strtolower($membershipStatus->Status ?? '');
+            ?>
+            <div class="membership-banner <?= $expired ? 'expired' : '' ?>">
+                <div class="banner-info">
+                    <i class="ph ph-identification-card banner-icon" style="color: <?= $expired ? '#e74c3c' : 'var(--primary)' ?>;"></i>
+                    <div class="banner-text">
+                        <h4 style="font-family: 'Outfit', sans-serif; font-size: 18px;">
+                            <?= h($membershipStatus->package->PackageName ?? 'Membership') ?>
+                            &nbsp;<span class="banner-pill <?= $expired ? 'pill-expired' : 'pill-active' ?>">
+                                <?= $expired ? 'Expired' : 'Active' ?>
+                            </span>
+                        </h4>
+                        <p>
+                            <?php if ($expired): ?>
+                                Your membership expired on <?= h($endDate->format('d M Y')) ?>.
+                            <?php else: ?>
+                                <?= $daysLeft ?> day<?= $daysLeft !== 1 ? 's' : '' ?> remaining &mdash;
+                                expires <?= h($endDate->format('d M Y')) ?>
+                            <?php endif; ?>
+                        </p>
+                    </div>
+                </div>
+                <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px; white-space: nowrap;">
+                    <i class="ph ph-arrow-right"></i> View Full Status
+                </a>
+            </div>
+        <?php elseif ($user): ?>
+            <div class="membership-banner">
+                <div class="banner-info">
+                    <i class="ph ph-warning banner-icon" style="color: #f39c12;"></i>
+                    <div class="banner-text">
+                        <h4>No Active Membership &nbsp;<span class="banner-pill pill-none">None</span></h4>
+                        <p>You need a membership to book classes. Join a package to get started.</p>
+                    </div>
+                </div>
+                <a href="<?= $this->Url->build('/private-coaching') ?>" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px; white-space: nowrap;">
+                    <i class="ph ph-plus"></i> Get a Membership
+                </a>
+            </div>
+        <?php endif; ?>
 
         <?php foreach ($classes as $class): ?>
             <?php 
@@ -124,10 +198,14 @@ $this->disableAutoLayout();
                 </div>
                 
                 <div class="class-actions">
-                    <?php if ($isFull): ?>
-                        <a href="<?= $this->Url->build(['action' => 'book', $class->ClassID]) ?>" class="btn-book btn-waitlist">Join Waitlist</a>
+                    <?php if (!empty($bookedClassIds[$class->ClassID])): ?>
+                        <span class="btn-booked">
+                            <i class="ph-fill ph-check-circle"></i> Booked
+                        </span>
+                    <?php elseif ($isFull): ?>
+                        <a href="<?= $this->Url->build('/schedule/book/' . $class->ClassID) ?>" class="btn-book btn-waitlist">Join Waitlist</a>
                     <?php else: ?>
-                        <a href="<?= $this->Url->build(['action' => 'book', $class->ClassID]) ?>" class="btn-book">Book Spot</a>
+                        <a href="<?= $this->Url->build('/schedule/book/' . $class->ClassID) ?>" class="btn-book">Book Spot</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -159,5 +237,10 @@ $this->disableAutoLayout();
             }
         }
     </script>
+
+    <?php if (!$user): ?>
+        <?= $this->element('login_modal') ?>
+    <?php endif; ?>
+    <?= $this->element('footer') ?>
 </body>
 </html>

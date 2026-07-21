@@ -23,7 +23,52 @@ class ScheduleController extends AppController
 
         $user = $this->getRequest()->getSession()->read('Auth.User');
 
-        $this->set(compact('classes', 'classStats', 'user'));
+        // Build a lookup of class IDs the current user has already booked
+        $bookedClassIds = [];
+        $membershipStatus = null;
+
+        if ($user) {
+            $userBookings = $bookingsTable->find()
+                ->where(['Bookings.UserID' => $user->UserID])
+                ->select(['ClassID'])
+                ->all();
+            foreach ($userBookings as $b) {
+                $bookedClassIds[$b->ClassID] = true;
+            }
+
+            // Fetch membership status for the banner
+            if (strtolower($user->Role ?? '') === 'trainer') {
+                $membership = new \App\Model\Entity\Membership([
+                    'Status' => 'Active',
+                    'StartDate' => new \Cake\I18n\FrozenTime(),
+                    'EndDate' => new \Cake\I18n\FrozenTime('+10 years'),
+                    'package' => new \App\Model\Entity\Package([
+                        'PackageName' => 'Staff Access',
+                        'Price' => 0.00
+                    ])
+                ]);
+            } else {
+                $membership = $this->fetchTable('Memberships')->find()
+                    ->where([
+                        'Memberships.UserID' => $user->UserID,
+                        'Memberships.Status IN' => ['Active', 'active']
+                    ])
+                    ->contain(['Packages'])
+                    ->orderBy(['Memberships.StartDate' => 'DESC', 'Memberships.MembershipID' => 'DESC'])
+                    ->first();
+
+                if (!$membership) {
+                    $membership = $this->fetchTable('Memberships')->find()
+                        ->where(['Memberships.UserID' => $user->UserID])
+                        ->contain(['Packages'])
+                        ->orderBy(['Memberships.StartDate' => 'DESC', 'Memberships.MembershipID' => 'DESC'])
+                        ->first();
+                }
+            }
+            $membershipStatus = $membership;
+        }
+
+        $this->set(compact('classes', 'classStats', 'user', 'bookedClassIds', 'membershipStatus'));
     }
 
     public function book($classId = null)

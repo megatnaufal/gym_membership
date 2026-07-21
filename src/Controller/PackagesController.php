@@ -29,8 +29,71 @@ class PackagesController extends AppController
     public function coaching()
     {
         $this->viewBuilder()->disableAutoLayout();
-        $packages = $this->Packages->find('all');
-        $this->set(compact('packages'));
+        
+        $user = $this->getRequest()->getSession()->read('Auth.User');
+
+        if ($this->request->is('post')) {
+            if (!$user) {
+                $this->Flash->error(__('Please log in to book a private session.'));
+                return $this->redirect('/?login=1');
+            }
+            
+            $data = $this->request->getData();
+            $privateLessonsTable = $this->fetchTable('PrivateLessons');
+            $lesson = $privateLessonsTable->newEmptyEntity();
+            
+            $lessonDateTime = $data['date'] . ' ' . $data['time'] . ':00';
+            
+            $lesson = $privateLessonsTable->patchEntity($lesson, [
+                'MemberUserID' => $user->UserID,
+                'TrainerUserID' => $data['trainer_id'],
+                'LessonDateTime' => $lessonDateTime,
+                'Status' => 'Confirmed'
+            ]);
+            
+            if ($privateLessonsTable->save($lesson)) {
+                $this->Flash->success(__('Private session booked successfully!'));
+                return $this->redirect(['action' => 'coaching']);
+            }
+            $this->Flash->error(__('Could not book the session. Please try again.'));
+        }
+
+        $trainers = $this->fetchTable('Trainers')->find()
+            ->contain(['Users'])
+            ->all();
+            
+        $today = new \DateTime();
+        $dateRange = [];
+        for ($i = 1; $i <= 14; $i++) {
+            $d = clone $today;
+            $d->modify("+$i days");
+            $dateRange[] = $d->format('Y-m-d');
+        }
+        
+        $classesTable = $this->fetchTable('Classes');
+        $trainerAvailability = [];
+        
+        foreach ($trainers as $trainer) {
+            $trainerAvailability[$trainer->UserID] = [];
+            foreach ($dateRange as $date) {
+                $startDate = new \DateTime($date . ' 00:00:00');
+                $endDate = clone $startDate;
+                $endDate->modify('+23 hours 59 minutes 59 seconds');
+                
+                $hasClass = $classesTable->find()
+                    ->where([
+                        'TrainerUserID' => $trainer->UserID,
+                        'StartTime >=' => $startDate,
+                        'StartTime <=' => $endDate
+                    ])->count() > 0;
+                    
+                if (!$hasClass) {
+                    $trainerAvailability[$trainer->UserID][] = $date;
+                }
+            }
+        }
+
+        $this->set(compact('trainers', 'trainerAvailability', 'user'));
     }
 
     /**

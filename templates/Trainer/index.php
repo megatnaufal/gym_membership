@@ -1,128 +1,303 @@
-<?php
-$this->disableAutoLayout();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trainer Dashboard</title>
+    <title>Trainer Portal | Anytime Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .dashboard-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .class-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
+        body {
+            background: var(--bg-dark);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            color: white;
+            font-family: 'Inter', sans-serif;
         }
-        .class-header { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px; }
-        .roster-table { width: 100%; border-collapse: collapse; }
-        .roster-table th, .roster-table td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .roster-table th { color: #888; font-size: 12px; text-transform: uppercase; }
-        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .status-booked { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
-        .status-waitlist { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+
+        .tp-main {
+            flex: 1;
+            padding: 40px 60px;
+            overflow-y: auto;
+        }
+
+        .tp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .tp-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0;
+            color: white;
+        }
+        .tp-header p {
+            color: #aaa;
+            margin: 5px 0 0 0;
+            font-size: 15px;
+        }
+
+        /* Flash Messages */
+        .flash-msg {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .flash-success {
+            background: rgba(46,204,113,0.1);
+            border: 1px solid rgba(46,204,113,0.3);
+            color: #2ecc71;
+        }
+        .flash-error {
+            background: rgba(231,76,60,0.1);
+            border: 1px solid rgba(231,76,60,0.3);
+            color: #e74c3c;
+        }
+
+        /* Class Cards for Dashboard */
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+        .class-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .class-header-box {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .class-header-box h2 {
+            margin: 0 0 8px 0;
+            color: var(--primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+        }
+        .class-time {
+            color: #aaa;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .class-stats {
+            text-align: right;
+        }
+        .class-stats .num {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: white;
+        }
+        .class-stats .label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .roster-area {
+            padding: 0;
+        }
+        .roster-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .roster-table th {
+            text-align: left;
+            padding: 12px 24px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            background: rgba(0,0,0,0.2);
+            font-weight: 600;
+        }
+        .roster-table td {
+            padding: 16px 24px;
+            font-size: 14px;
+            color: #ddd;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .roster-table tr:last-child td { border-bottom: none; }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-booked { background: rgba(46,204,113,0.15); color: #2ecc71; }
+        .status-waitlist { background: rgba(241,196,15,0.15); color: #f1c40f; }
+
+        .empty-state {
+            padding: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
     </style>
 </head>
-<body style="background: var(--bg-dark); color: white;">
+<body>
 
-    <nav class="navbar" style="background: rgba(15, 15, 17, 0.95); position: sticky; z-index: 100;">
-        <div class="nav-brand"><a href="/">Trainer<span>Portal</span></a></div>
-        <div class="nav-links">
-            <span style="color: #aaa;">Welcome, <?= h($user->FullName) ?></span>
+    <?= $this->element('trainer_nav') ?>
+
+    <main class="tp-main">
+        <div class="tp-header">
+            <div>
+                <h1>Trainer Dashboard</h1>
+                <p>Welcome back! Here are your assigned classes and rosters.</p>
+            </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <!-- Profile Dropdown -->
-            <div class="profile-dropdown">
-                <div class="profile-avatar" onclick="toggleDropdown(event)">
-                    <?= $this->Html->image('default_avatar.png', ['alt' => 'Profile']) ?>
-                </div>
-                <div class="dropdown-menu" id="profileDropdown">
-                    <div class="dropdown-header">
-                        <span class="user-name"><?= h($user->FullName ?? 'User') ?></span>
-                        <span class="user-email"><?= h($user->Email ?? '') ?></span>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <a href="<?= $this->Url->build('/users/edit/' . ($user->UserID ?? '')) ?>"><i class="ph ph-user"></i> My Profile</a>
-                    <a href="<?= $this->Url->build('/users/change-password') ?>"><i class="ph ph-lock-key"></i> Change Password</a>
-                    <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Class Schedule</a>
-                    <a href="<?= $this->Url->build('/memberships/status') ?>"><i class="ph ph-identification-card"></i> Membership Status</a>
-                </div>
+
+        <?php if ($this->Flash->render()): ?>
+            <div class="flash-msg flash-success">
+                <i class="ph-fill ph-check-circle" style="font-size:20px;"></i>
+                <div><?= $this->Flash->render() ?></div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (empty($classes)): ?>
+            <div class="empty-state" style="background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                <i class="ph ph-calendar-blank" style="font-size: 48px; color: #444; margin-bottom: 15px;"></i>
+                <p>You have no assigned classes at the moment.</p>
+            </div>
+        <?php else: ?>
+            <div class="chart-container" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 30px;">
+                <h2 style="margin: 0 0 20px 0; font-family: 'Outfit', sans-serif; font-size: 20px; color: var(--primary);">Class Bookings vs Capacity</h2>
+                <canvas id="bookingsChart" height="80"></canvas>
             </div>
 
-            <a href="<?= $this->Url->build('/users/logout') ?>" class="nav-cta" style="background: transparent; border: 1px solid white;">Log Out</a>
-        </div>
-    </nav>
+            <div class="class-grid">
+                <?php foreach ($classes as $class): ?>
+                    <div class="class-card">
+                        <div class="class-header-box">
+                            <div>
+                                <h2><?= h($class->ClassName) ?></h2>
+                                <div class="class-time"><i class="ph-fill ph-clock"></i> <?= $class->StartTime->format('D, M j - g:i A') ?></div>
+                            </div>
+                            <div class="class-stats">
+                                <div class="num"><?= count($class->bookings) ?> / <?= h($class->Capacity) ?></div>
+                                <div class="label">Booked</div>
+                            </div>
+                        </div>
+                        
+                        <div class="roster-area">
+                            <?php if (empty($class->bookings)): ?>
+                                <div class="empty-state">No members booked yet.</div>
+                            <?php else: ?>
+                                <table class="roster-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Member Name</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($class->bookings as $booking): ?>
+                                            <tr>
+                                                <td>
+                                                    <div style="font-weight: 500; color: white;"><?= h($booking->user->FullName ?? 'Unknown') ?></div>
+                                                    <div style="font-size: 12px; color: #888; margin-top: 2px;"><?= h($booking->user->Email ?? 'N/A') ?></div>
+                                                </td>
+                                                <td>
+                                                    <span class="status-badge <?= strtolower($booking->AttendanceStatus) == 'waitlisted' ? 'status-waitlist' : 'status-booked' ?>">
+                                                        <?= h($booking->AttendanceStatus) ?>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </main>
 
-    <div class="dashboard-container">
-        <h1>Your Assigned Classes</h1>
-        <p style="color: #aaa;">View your upcoming schedule and member rosters.</p>
+    <?php if (!empty($classes)): ?>
+    <script>
+        const ctx = document.getElementById('bookingsChart').getContext('2d');
+        
+        // Prepare data from PHP
+        const classNames = [];
+        const bookedData = [];
+        const capacityData = [];
         
         <?php foreach ($classes as $class): ?>
-            <div class="class-card">
-                <div class="class-header">
-                    <div>
-                        <h2 style="margin: 0; color: var(--primary);"><?= h($class->ClassName) ?></h2>
-                        <div style="color: #aaa; margin-top: 5px;"><i class="ph-fill ph-clock"></i> <?= $class->StartTime->format('D, M j - g:i A') ?></div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 24px; font-weight: bold;"><?= count($class->bookings) ?> / <?= h($class->Capacity) ?></div>
-                        <div style="color: #888; font-size: 12px;">Total Booked</div>
-                    </div>
-                </div>
-                
-                <?php if (empty($class->bookings)): ?>
-                    <p style="color: #666; text-align: center; padding: 20px;">No members have booked this class yet.</p>
-                <?php else: ?>
-                    <table class="roster-table">
-                        <thead>
-                            <tr>
-                                <th>Member Name</th>
-                                <th>Email</th>
-                                <th>Booked On</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($class->bookings as $booking): ?>
-                                <tr>
-                                    <td><?= h($booking->member->FullName ?? 'Unknown') ?></td>
-                                    <td><?= h($booking->member->Email ?? 'N/A') ?></td>
-                                    <td><?= $booking->BookingDate->format('M j, Y') ?></td>
-                                    <td>
-                                        <span class="status-badge <?= strtolower($booking->AttendanceStatus) == 'waitlisted' ? 'status-waitlist' : 'status-booked' ?>">
-                                            <?= h($booking->AttendanceStatus) ?>
-                                        </span>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-            </div>
+            classNames.push('<?= addslashes($class->ClassName) ?>');
+            bookedData.push(<?= count($class->bookings) ?>);
+            capacityData.push(<?= (int)$class->Capacity ?>);
         <?php endforeach; ?>
-    </div>
-
-    <script>
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            document.getElementById("profileDropdown").classList.toggle("show");
-        }
-
-        window.onclick = function(event) {
-            if (!event.target.matches('.profile-avatar') && !event.target.closest('.profile-avatar')) {
-                var dropdowns = document.getElementsByClassName("dropdown-menu");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: classNames,
+                datasets: [
+                    {
+                        label: 'Booked',
+                        data: bookedData,
+                        backgroundColor: 'rgba(138, 43, 226, 0.7)',
+                        borderColor: 'rgba(138, 43, 226, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Capacity',
+                        data: capacityData,
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#ccc' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#888', stepSize: 1 },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#ccc' },
+                        grid: { display: false }
                     }
                 }
             }
-        }
+        });
     </script>
+    <?php endif; ?>
+
 </body>
 </html>

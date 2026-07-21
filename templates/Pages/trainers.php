@@ -14,17 +14,7 @@ $this->disableAutoLayout();
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar" style="background: rgba(15, 15, 17, 0.95); position: sticky;">
-        <div class="nav-brand">
-            <a href="/">Anytime<span>Fitness</span></a>
-        </div>
-        <div class="nav-links">
-            <a href="<?= $this->Url->build('/our-trainers') ?>" style="color: var(--primary);">Our Trainers</a>
-            <a href="<?= $this->Url->build('/private-coaching') ?>">Private Coaching</a>
-            <a href="<?= $this->Url->build('/') ?>">Why Join</a>
-        </div>
-        <a href="<?= $this->Url->build('/') ?>" class="nav-cta">Join Now</a>
-    </nav>
+    <?= $this->element('navbar', ['active' => 'trainers']) ?>
 
     <!-- Header -->
     <div style="background: linear-gradient(135deg, var(--bg-dark), #2a1440); padding: 80px 50px; text-align: center; border-bottom: 1px solid var(--glass-border);">
@@ -66,15 +56,7 @@ $this->disableAutoLayout();
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="<?= $this->Url->build('/') ?>">Home</a>
-            <a href="<?= $this->Url->build('/') ?>">Careers</a>
-            <a href="<?= $this->Url->build('/') ?>">Privacy Policy</a>
-            <a href="<?= $this->Url->build('/') ?>">Terms & Conditions</a>
-        </div>
-        <p style="color: #555; font-size: 12px; text-align: center;">© <?= date('Y') ?> Anytime Fitness. All rights reserved.</p>
-    </footer>
+    <?= $this->element('footer') ?>
 
 </body>
 </html>

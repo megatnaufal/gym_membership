@@ -1,7 +1,9 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var iterable<\App\Model\Entity\Package> $packages
+ * @var iterable<\App\Model\Entity\Trainer> $trainers
+ * @var array $trainerAvailability
+ * @var \App\Model\Entity\User $user
  */
 $this->disableAutoLayout();
 ?>
@@ -14,138 +16,183 @@ $this->disableAutoLayout();
     
     <?= $this->Html->css(['anytime_home', 'anytime_coaching']) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .trainer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .trainer-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--glass-shadow);
+        }
+        .trainer-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .trainer-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+        .trainer-avatar i { font-size: 40px; color: white; }
+        .trainer-info h2 { margin: 0 0 5px 0; font-family: 'Outfit', sans-serif; font-size: 24px; color: white; }
+        .trainer-info p { margin: 0; color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 5px; }
+        
+        .booking-form {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .booking-form h4 {
+            margin: 0 0 15px 0;
+            color: white;
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #ccc; }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+        .form-control option { background: #1a1a1a; color: white; }
+        
+        .btn-book {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-book:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(138,43,226,0.3); }
+        .btn-disabled { background: rgba(255,255,255,0.1); color: #888; cursor: not-allowed; }
+        
+        .no-availability {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+            font-size: 14px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+        }
+        
+        .flash-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar" style="background: rgba(15, 15, 17, 0.95); position: sticky; z-index: 100;">
-        <div class="nav-brand">
-            <a href="/">Anytime<span>Fitness</span></a>
-        </div>
-        <div class="nav-links">
-            <a href="<?= $this->Url->build('/our-trainers') ?>">Our Trainers</a>
-            <a href="<?= $this->Url->build('/private-coaching') ?>" style="color: var(--primary);">Private Coaching</a>
-            <a href="<?= $this->Url->build('/') ?>">Why Join</a>
-        </div>
-        <a href="<?= $this->Url->build('/') ?>" class="nav-cta">Join Now</a>
-    </nav>
+    <?= $this->element('navbar', ['active' => 'coaching']) ?>
 
     <!-- Header -->
     <header class="pricing-header">
-        <h1>Transform Your Life Today</h1>
-        <p>Unlock your ultimate potential with our expert-designed private coaching packages. Secure your spot now and lock in our exclusive online pricing.</p>
+        <h1>Book 1-on-1 Coaching</h1>
+        <p>Take your training to the next level. Book our expert trainers on their off-days for dedicated, personalized attention.</p>
     </header>
 
-    <!-- Pricing Grid -->
-    <div class="pricing-container">
-        
-        <?php 
-        $i = 0;
-        foreach ($packages as $package): 
-            $i++;
-            // Calculate a fake original price for the psychological effect
-            $originalPrice = is_numeric($package->Price) ? intval($package->Price * 1.5) : intval((float)str_replace(',', '', $package->Price) * 1.5);
-            $isPopular = ($i == 2); // Make the second package "Popular"
-            
-            $level = $package->AccessLevel ?? 'Basic';
-            $features = [];
-            
-            if ($level === 'Basic') {
-                $features = [
-                    '24/7 Global Club Access',
-                    'State-of-the-Art Equipment Usage',
-                    'Complimentary Fitness Assessment',
-                    'Access to Anytime Fitness App',
-                    'Locker Room & Premium Showers',
-                    'No Lock-in Contract (Cancel Anytime)'
-                ];
-            } elseif ($level === 'Standard') {
-                $features = [
-                    'Everything in Basic, PLUS:',
-                    'Unlimited Group Classes (HIIT, Yoga, Spin)',
-                    'Pre-booking Priority for Classes',
-                    'Free Monthly Body Composition Scan',
-                    '10% Discount at the Juice Bar',
-                    'Free Anytime Fitness Towel'
-                ];
-            } elseif ($level === 'Premium') {
-                $features = [
-                    'Everything in Standard, PLUS:',
-                    '4x Private 1-on-1 Coaching Sessions',
-                    'Personalized Workout Programming',
-                    'Form Correction & Technique Analysis',
-                    'Direct WhatsApp Support from Trainer',
-                    'Custom Caloric & Macro Goal Setting'
-                ];
-            } elseif ($level === 'VIP') {
-                $features = [
-                    'Everything in Premium, PLUS:',
-                    '8x Private 1-on-1 Coaching Sessions',
-                    'Dedicated Permanent Locker',
-                    'Comprehensive Bi-Weekly Progress Tracking',
-                    'Fully Customized Meal Plan Creation',
-                    'Complimentary Protein Shake Post-Workout'
-                ];
-            } elseif ($level === 'Elite') {
-                $features = [
-                    'The Ultimate VIP Experience:',
-                    '12x Private 1-on-1 Coaching Sessions',
-                    '24/7 On-Call Concierge Trainer Support',
-                    'Advanced Recovery (Massage Passes)',
-                    'Free Anytime Fitness Premium Merch Kit',
-                    'Unlimited VIP Guest Passes (Bring a friend)'
-                ];
-            } else {
-                $features = ['24/7 Premium Gym Access', '1-on-1 Strategy Session'];
-            }
-        ?>
-        <div class="pricing-card <?= $isPopular ? 'popular' : '' ?>">
-            <?php if ($isPopular): ?>
-                <div class="popular-badge">Most Popular / Best Value</div>
-            <?php endif; ?>
-            
-            <div class="plan-name"><?= h($package->PackageName) ?></div>
-            <div class="plan-price-container">
-                <span class="original-price">RM <?= number_format($originalPrice) ?></span>
-                <div class="current-price">
-                    <span class="currency">RM</span><?= h($package->Price) ?><span class="billing-cycle">/<?= h($package->BillingCycle) ?></span>
+    <div class="flash-container">
+        <?= $this->Flash->render() ?>
+    </div>
+
+    <!-- Trainers Grid -->
+    <div class="trainer-grid">
+        <?php foreach ($trainers as $trainer): ?>
+            <div class="trainer-card">
+                <div class="trainer-header">
+                    <div class="trainer-avatar">
+                        <i class="ph-fill ph-user-circle"></i>
+                    </div>
+                    <div class="trainer-info">
+                        <h2><?= h($trainer->user->FullName ?? 'Trainer') ?></h2>
+                        <p><i class="ph-fill ph-medal"></i> <?= h($trainer->Specialty ?? 'Fitness Expert') ?></p>
+                    </div>
                 </div>
+                
+                <?php $dates = $trainerAvailability[$trainer->UserID] ?? []; ?>
+                
+                <?php if (empty($dates)): ?>
+                    <div class="no-availability">
+                        <i class="ph ph-calendar-x" style="font-size: 32px; margin-bottom: 10px;"></i><br>
+                        Currently fully booked. No off-days available in the next 14 days.
+                    </div>
+                <?php else: ?>
+                    <div class="booking-form">
+                        <h4>Book a Session</h4>
+                        <?= $this->Form->create(null, ['url' => ['action' => 'coaching']]) ?>
+                            <input type="hidden" name="trainer_id" value="<?= $trainer->UserID ?>">
+                            
+                            <div class="form-group">
+                                <label>Available Date</label>
+                                <select name="date" class="form-control" required>
+                                    <option value="">Select a date...</option>
+                                    <?php foreach ($dates as $date): ?>
+                                        <option value="<?= h($date) ?>"><?= date('D, M j, Y', strtotime($date)) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Time Slot</label>
+                                <select name="time" class="form-control" required>
+                                    <option value="">Select a time...</option>
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="15:00">03:00 PM</option>
+                                    <option value="16:00">04:00 PM</option>
+                                    <option value="17:00">05:00 PM</option>
+                                    <option value="18:00">06:00 PM</option>
+                                </select>
+                            </div>
+                            
+                            <?php if ($user): ?>
+                                <button type="submit" class="btn-book">Confirm Booking</button>
+                            <?php else: ?>
+                                <a href="<?= $this->Url->build('/?login=1') ?>" class="btn-book btn-disabled" style="display: block; text-align: center; text-decoration: none;">Log in to book</a>
+                            <?php endif; ?>
+                        <?= $this->Form->end() ?>
+                    </div>
+                <?php endif; ?>
             </div>
-            <ul class="plan-features">
-                <?php foreach ($features as $feature): ?>
-                    <li <?= strpos($feature, 'PLUS:') !== false || strpos($feature, 'Experience:') !== false ? 'style="color: var(--primary); font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;"' : '' ?>>
-                        <?php if (strpos($feature, 'PLUS:') === false && strpos($feature, 'Experience:') === false): ?>
-                            <i class="ph-fill ph-check-circle"></i>
-                        <?php endif; ?>
-                        <?= $feature ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-            <a href="<?= $this->Url->build(['controller' => 'Checkout', 'action' => 'package', $package->PackageID]) ?>" class="btn btn-primary btn-pricing" <?= !$isPopular ? 'style="background: transparent; border: 2px solid var(--primary);"' : '' ?>>Select Plan</a>
-        </div>
         <?php endforeach; ?>
-
     </div>
-
-    <!-- Guarantee Banner -->
-    <div class="guarantee-banner">
-        <i class="ph-fill ph-shield-check"></i>
-        <div>
-            <h4>Iron-Clad Results Guarantee</h4>
-            <p>We are so confident in our world-class trainers that if you don't see measurable results in your first 30 days while following the plan, your <strong>First Session is completely FREE</strong>. No questions asked.</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="<?= $this->Url->build('/') ?>">Home</a>
-            <a href="<?= $this->Url->build('/') ?>">Careers</a>
-            <a href="<?= $this->Url->build('/') ?>">Privacy Policy</a>
-            <a href="<?= $this->Url->build('/') ?>">Terms & Conditions</a>
-        </div>
-        <p style="color: #555; font-size: 12px; text-align: center;">© <?= date('Y') ?> Anytime Fitness. All rights reserved.</p>
-    </footer>
-
+    <?= $this->element('footer') ?>
 </body>
 </html>

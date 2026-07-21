@@ -12,8 +12,11 @@ class UsersController extends AppController
 {
     public function login()
     {
-        $this->viewBuilder()->disableAutoLayout();
-        
+        // GET: redirect to home page — the modal will open via ?login=1
+        if ($this->request->is('get')) {
+            return $this->redirect('/?login=1');
+        }
+
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $user = $this->Users->find()
@@ -22,7 +25,7 @@ class UsersController extends AppController
 
             if ($user) {
                 $this->getRequest()->getSession()->write('Auth.User', $user);
-                
+
                 $role = strtolower($user->Role);
                 if ($role === 'admin') {
                     return $this->redirect('/admin');
@@ -32,8 +35,32 @@ class UsersController extends AppController
                     return $this->redirect('/schedule');
                 }
             }
-            $this->Flash->error(__('Invalid username or password'));
+
+            // Failed login — flash error with 'login' key so it renders inside the modal
+            $this->Flash->error(__('Invalid username or password. Please try again.'), ['key' => 'login']);
+            return $this->redirect('/?login=1');
         }
+    }
+
+    public function register()
+    {
+        $this->viewBuilder()->disableAutoLayout();
+        $user = $this->Users->newEmptyEntity();
+
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            // Force role to Member to prevent access to Trainer portal
+            $data['Role'] = 'Member';
+            
+            $user = $this->Users->patchEntity($user, $data);
+            if ($this->Users->save($user)) {
+                $this->getRequest()->getSession()->write('Auth.User', $user);
+                $this->Flash->success(__('Account created successfully. Welcome!'));
+                return $this->redirect('/schedule');
+            }
+            $this->Flash->error(__('Could not create account. Please ensure your username and email are unique.'));
+        }
+        $this->set(compact('user'));
     }
 
     public function logout()
