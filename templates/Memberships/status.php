@@ -206,6 +206,21 @@ if ($membership) {
 
     <?= $this->Flash->render() ?>
 
+    <!-- ── Digital Pass ── -->
+    <div style="background: linear-gradient(135deg, rgba(138,43,226,.15) 0%, rgba(0,210,255,.08) 100%); border: 1px solid rgba(138,43,226,.3); border-radius: 24px; padding: 32px 40px; margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; gap: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div>
+            <h2 style="margin: 0 0 8px 0; font-family: 'Outfit', sans-serif; font-size: 28px; color: white; display: flex; align-items: center; gap: 10px;">
+                <i class="ph-fill ph-check-badge" style="color: var(--primary);"></i> Digital Pass
+            </h2>
+            <p style="margin: 0 0 20px 0; color: #aaa; font-size: 15px;">Scan this QR code at the front desk to check in.</p>
+            <div style="display: inline-flex; flex-direction: column;">
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #888;">Member Name</span>
+                <span style="font-size: 20px; font-weight: 700; color: white;"><?= h($user->FullName) ?></span>
+            </div>
+        </div>
+        <div id="qrcode" style="background: white; padding: 14px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);"></div>
+    </div>
+
     <!-- ── Membership Details ── -->
     <?php if ($membership): ?>
         <?php
@@ -353,6 +368,18 @@ window.onclick = function(event) {
         }
     }
 };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    <?php $memberId = $user->UserID ?? ($user['UserID'] ?? 0); ?>
+    new QRCode(document.getElementById("qrcode"), {
+        text: "gym-member-id:<?= $memberId ?>",
+        width: 140,
+        height: 140,
+        colorDark : "#111111",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
 </script>
 </body>
 </html>

@@ -159,6 +159,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Username</th>
+                    <th>Specialty</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -176,6 +177,11 @@
                     <td><?= h($t->Email) ?></td>
                     <td><?= h($t->Phone ?: 'N/A') ?></td>
                     <td><?= h($t->Username) ?></td>
+                    <td>
+                        <span style="background: rgba(46,204,113,0.15); color: #2ecc71; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                            <?= h($t->trainer->Specialty ?? 'General') ?>
+                        </span>
+                    </td>
                     <td>
                         <div class="actions">
                             <a href="<?= $this->Url->build('/trainer/edit-trainer/' . $t->UserID) ?>" class="btn-action btn-edit" title="Edit">

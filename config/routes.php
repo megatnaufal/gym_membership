@@ -61,7 +61,9 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/checkout/package/*', ['controller' => 'Checkout', 'action' => 'package']);
         $builder->connect('/checkout/thank-you', ['controller' => 'Checkout', 'action' => 'thankYou']);
         $builder->connect('/checkout/invoice', ['controller' => 'Checkout', 'action' => 'invoice']);
-        $builder->connect('/admin', ['controller' => 'Pages', 'action' => 'display', 'admin']);
+        $builder->connect('/admin', ['controller' => 'Admin', 'action' => 'index']);
+        $builder->connect('/admin/scanner', ['controller' => 'Admin', 'action' => 'scanner']);
+        $builder->connect('/admin/check-in', ['controller' => 'Admin', 'action' => 'checkIn']);
 
         $builder->connect('/schedule', ['controller' => 'Schedule', 'action' => 'index']);
         $builder->connect('/schedule/book/*', ['controller' => 'Schedule', 'action' => 'book']);

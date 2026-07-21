@@ -47,6 +47,10 @@ class UsersTable extends Table
         $this->hasMany('Classes', [
             'foreignKey' => 'TrainerUserID'
         ]);
+        $this->hasOne('Trainers', [
+            'foreignKey' => 'UserID',
+            'joinType' => 'LEFT'
+        ]);
     }
 
     /**

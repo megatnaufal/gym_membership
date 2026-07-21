@@ -123,6 +123,7 @@ class TrainerController extends AppController
     {
         $trainers = $this->fetchTable('Users')->find()
             ->where(['Role' => 'trainer'])
+            ->contain(['Trainers'])
             ->order(['FullName' => 'ASC'])
             ->all();
         $this->set(compact('trainers'));
@@ -136,13 +137,14 @@ class TrainerController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $data['Role'] = 'trainer'; // Force role to trainer
+            $specialty = $data['Specialty'] ?? 'General';
             
             $trainer = $usersTable->patchEntity($trainer, $data);
             if ($usersTable->save($trainer)) {
                 $trainersTable = $this->fetchTable('Trainers');
                 $newTrainer = $trainersTable->newEntity([
                     'UserID' => $trainer->UserID,
-                    'Specialty' => 'General',
+                    'Specialty' => $specialty,
                     'Rating' => 0.0
                 ]);
                 $trainersTable->save($newTrainer);
@@ -158,7 +160,7 @@ class TrainerController extends AppController
     public function editTrainer($id = null)
     {
         $usersTable = $this->fetchTable('Users');
-        $trainer = $usersTable->get($id);
+        $trainer = $usersTable->find()->where(['Users.UserID' => $id])->contain(['Trainers'])->first();
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             // Unset password if it's empty so it doesn't overwrite with empty string
@@ -166,10 +168,25 @@ class TrainerController extends AppController
             if (empty($data['Password'])) {
                 unset($data['Password']);
             }
+            $specialty = $data['Specialty'] ?? null;
             
             // Allow bypassing Username validation on update if necessary, but standard save should work.
             $trainer = $usersTable->patchEntity($trainer, $data);
             if ($usersTable->save($trainer)) {
+                if ($specialty !== null) {
+                    $trainersTable = $this->fetchTable('Trainers');
+                    $trainerProfile = $trainersTable->find()->where(['UserID' => $trainer->UserID])->first();
+                    if ($trainerProfile) {
+                        $trainerProfile->Specialty = $specialty;
+                    } else {
+                        $trainerProfile = $trainersTable->newEntity([
+                            'UserID' => $trainer->UserID,
+                            'Specialty' => $specialty,
+                            'Rating' => 0.0
+                        ]);
+                    }
+                    $trainersTable->save($trainerProfile);
+                }
                 $this->Flash->success(__('The trainer has been updated.'));
                 return $this->redirect(['action' => 'trainers']);
             }

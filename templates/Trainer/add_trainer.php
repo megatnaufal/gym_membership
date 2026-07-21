@@ -156,6 +156,11 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>Specialty</label>
+                <?= $this->Form->control('Specialty', ['label' => false, 'class' => 'form-control', 'required' => true, 'placeholder' => 'e.g. Weightlifting, Yoga, Cardio']) ?>
+            </div>
+
             <div style="margin-top: 30px;">
                 <button type="submit" class="btn-submit">Save Trainer</button>
                 <a href="<?= $this->Url->build('/trainer/trainers') ?>" class="btn-cancel">Cancel</a>
