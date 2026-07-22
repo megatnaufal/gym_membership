@@ -31,6 +31,11 @@ class CheckoutController extends AppController
 
         if ($isLoggedIn) {
             $userId = is_object($sessionUser) ? $sessionUser->UserID : ($sessionUser['UserID'] ?? null);
+        } else {
+            // Require login
+            $this->getRequest()->getSession()->write('Auth.redirect', '/checkout/package/' . $id);
+            $this->Flash->error('You must sign in or sign up before purchasing a package.', ['key' => 'login']);
+            return $this->redirect('/?login=1');
         }
 
         // ── POST: process payment ─────────────────────────────────────

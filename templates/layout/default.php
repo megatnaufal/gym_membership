@@ -13,6 +13,7 @@ $cakeDescription = 'Anytime Admin';
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css(['anytime_admin']) ?>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <?= $this->fetch('meta') ?>

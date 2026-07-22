@@ -6,6 +6,7 @@
     <title>Trainer Portal | Anytime Fitness</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -72,12 +73,20 @@
             gap: 25px;
         }
         .class-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .class-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 15px 40px -10px rgba(138,43,226,0.2);
         }
         .class-header-box {
             padding: 24px;
@@ -164,9 +173,9 @@
     <?= $this->element('trainer_nav') ?>
 
     <main class="tp-main">
-        <div class="tp-header">
+        <div class="tp-header reveal">
             <div>
-                <h1>Trainer Dashboard</h1>
+                <h1>Trainer <span class="text-gradient">Dashboard</span></h1>
                 <p>Welcome back! Here are your assigned classes and rosters.</p>
             </div>
         </div>
@@ -184,14 +193,14 @@
                 <p>You have no assigned classes at the moment.</p>
             </div>
         <?php else: ?>
-            <div class="chart-container" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 30px;">
+            <div class="chart-container reveal" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-bottom: 30px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);">
                 <h2 style="margin: 0 0 20px 0; font-family: 'Outfit', sans-serif; font-size: 20px; color: var(--primary);">Class Bookings vs Capacity</h2>
                 <canvas id="bookingsChart" height="80"></canvas>
             </div>
 
             <div class="class-grid">
                 <?php foreach ($classes as $class): ?>
-                    <div class="class-card">
+                    <div class="class-card reveal">
                         <div class="class-header-box">
                             <div>
                                 <h2><?= h($class->ClassName) ?></h2>
@@ -218,8 +227,8 @@
                                         <?php foreach ($class->bookings as $booking): ?>
                                             <tr>
                                                 <td>
-                                                    <div style="font-weight: 500; color: white;"><?= h($booking->user->FullName ?? 'Unknown') ?></div>
-                                                    <div style="font-size: 12px; color: #888; margin-top: 2px;"><?= h($booking->user->Email ?? 'N/A') ?></div>
+                                                    <div style="font-weight: 500; color: white;"><?= h($booking->member->FullName ?? 'Unknown') ?></div>
+                                                    <div style="font-size: 12px; color: #888; margin-top: 2px;"><?= h($booking->member->Email ?? 'N/A') ?></div>
                                                 </td>
                                                 <td>
                                                     <span class="status-badge <?= strtolower($booking->AttendanceStatus) == 'waitlisted' ? 'status-waitlist' : 'status-booked' ?>">

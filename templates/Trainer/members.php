@@ -6,6 +6,7 @@
     <title>Manage Members | Anytime Fitness</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         body {
@@ -68,6 +69,8 @@
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
         .data-table th {
             text-align: left;
@@ -137,24 +140,25 @@
     <?= $this->element('trainer_nav') ?>
 
     <main class="tp-main">
-        <div class="tp-header">
+        <div class="tp-header reveal">
             <div>
-                <h1>Manage Members</h1>
+                <h1>Manage <span class="text-gradient">Members</span></h1>
                 <p>Add, edit, or remove gym members.</p>
             </div>
-            <a href="<?= $this->Url->build('/trainer/add-member') ?>" class="btn-add"><i class="ph ph-plus-circle"></i> Add Member</a>
+            <a href="<?= $this->Url->build('/trainer/add-member') ?>" class="btn-add reveal"><i class="ph ph-plus-circle"></i> Add Member</a>
         </div>
 
         <?php if ($this->Flash->render()): ?>
-            <div class="flash-msg flash-success">
+            <div class="flash-msg flash-success reveal">
                 <i class="ph-fill ph-check-circle" style="font-size:20px;"></i>
                 <div><?= $this->Flash->render() ?></div>
             </div>
         <?php endif; ?>
 
-        <table class="data-table">
-            <thead>
-                <tr>
+        <div class="reveal">
+            <table class="data-table">
+                <thead>
+                    <tr>
                     <th>Member Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -197,6 +201,7 @@
                 <?php endif; ?>
             </tbody>
         </table>
+        </div>
     </main>
 
 </body>

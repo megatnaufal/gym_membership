@@ -7,6 +7,7 @@
     <title>Checkout – <?= h($package->PackageName) ?> | Anytime Fitness</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         /* ── Layout ── */
@@ -40,12 +41,14 @@
         .ck-side .brand a span { color: var(--primary); }
 
         .pkg-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px;
             padding: 32px;
             margin-top: 36px;
             flex: 1;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         .pkg-name {
             font-family: 'Outfit', sans-serif;
@@ -373,11 +376,11 @@
 
     <!-- ═══ LEFT SIDEBAR ═══════════════════════════════════════════ -->
     <aside class="ck-side">
-        <div class="brand">
+        <div class="brand reveal">
             <a href="<?= $this->Url->build('/') ?>"><span style="color:white;">Anytime</span><span>Fitness</span></a>
         </div>
 
-        <div class="pkg-card">
+        <div class="pkg-card reveal">
             <p class="pkg-name"><?= h($package->PackageName) ?></p>
             <p class="pkg-cycle">Billed <?= h(strtolower($package->BillingCycle)) ?></p>
             <div class="pkg-price"><span>RM</span><?= h(number_format((float)$package->Price, 2)) ?></div>
@@ -409,8 +412,8 @@
     <!-- ═══ MAIN FORM ═══════════════════════════════════════════════ -->
     <main class="ck-main">
 
-        <h1 class="ck-heading">Complete Your Purchase</h1>
-        <p class="ck-sub">
+        <h1 class="ck-heading reveal">Complete Your <span class="text-gradient">Purchase</span></h1>
+        <p class="ck-sub reveal">
             <?= $isLoggedIn ? 'Confirm your details and choose a payment method.' : 'Create your account and activate your membership instantly.' ?>
         </p>
 
@@ -439,6 +442,7 @@
             <input type="hidden" name="payment_method" id="pm_input" value="stripe">
             <input type="hidden" name="fpx_bank" id="fpx_bank_input" value="">
 
+            <div class="reveal">
             <?php if ($isLoggedIn): ?>
                 <!-- ── Logged-in user badge ── -->
                 <div class="user-badge">
@@ -464,42 +468,11 @@
                     </div>
                 </div>
 
-            <?php else: ?>
-                <!-- ── Guest: Full registration ── -->
-                <div class="sec-label">Personal Details</div>
-
-                <div class="fgroup mb">
-                    <label class="flabel">Full Name <span>*</span></label>
-                    <input class="finput" type="text" name="full_name" placeholder="John Doe" required>
-                </div>
-
-                <div class="frow">
-                    <div class="fgroup">
-                        <label class="flabel">Email Address <span>*</span></label>
-                        <input class="finput" type="email" name="email" placeholder="john@example.com" required>
-                    </div>
-                    <div class="fgroup">
-                        <label class="flabel">Phone Number</label>
-                        <input class="finput" type="tel" name="phone" placeholder="01X-XXXXXXX" maxlength="11">
-                    </div>
-                </div>
-
-                <div class="sec-label">Create Account</div>
-
-                <div class="frow">
-                    <div class="fgroup">
-                        <label class="flabel">Username <span>*</span></label>
-                        <input class="finput" type="text" name="username" placeholder="Choose a username" required>
-                    </div>
-                    <div class="fgroup">
-                        <label class="flabel">Password <span>*</span></label>
-                        <input class="finput" type="password" name="password" placeholder="Min. 8 characters" required minlength="8">
-                    </div>
-                </div>
-
             <?php endif; ?>
+            </div>
 
             <!-- ── Payment Method ── -->
+            <div class="reveal">
             <div class="sec-label">Payment Method</div>
 
             <div class="pm-tabs">
@@ -563,6 +536,7 @@
                 <i class="ph-fill ph-shield-check"></i>
                 Guaranteed Safe &amp; Secure — Powered by Stripe &amp; FPX
             </p>
+            </div>
 
         </form>
 

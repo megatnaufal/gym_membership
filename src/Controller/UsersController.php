@@ -26,6 +26,11 @@ class UsersController extends AppController
             if ($user) {
                 $this->getRequest()->getSession()->write('Auth.User', $user);
 
+                $redirect = $this->getRequest()->getSession()->consume('Auth.redirect');
+                if ($redirect) {
+                    return $this->redirect($redirect);
+                }
+
                 $role = strtolower($user->Role);
                 if ($role === 'admin') {
                     return $this->redirect('/admin');
@@ -56,6 +61,12 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->getRequest()->getSession()->write('Auth.User', $user);
                 $this->Flash->success(__('Account created successfully. Welcome!'));
+                
+                $redirect = $this->getRequest()->getSession()->consume('Auth.redirect');
+                if ($redirect) {
+                    return $this->redirect($redirect);
+                }
+
                 return $this->redirect('/schedule');
             }
             $this->Flash->error(__('Could not create account. Please ensure your username and email are unique.'));
@@ -128,11 +139,17 @@ class UsersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('Your profile has been updated.'));
+                
+                // Update session if it's the current user
+                $sessionUser = $this->getRequest()->getSession()->read('Auth.User');
+                if ($sessionUser && $sessionUser->UserID === $user->UserID) {
+                    $this->getRequest()->getSession()->write('Auth.User', $user);
+                }
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit', $user->UserID]);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('Your profile could not be updated. Please try again.'));
         }
         $this->set(compact('user'));
     }

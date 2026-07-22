@@ -31,6 +31,10 @@
         <div>
             <h4 style="color: white; font-family: 'Outfit', sans-serif; font-size: 18px; margin-bottom: 20px;">Contact & Legal</h4>
             <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                <li style="color: #aaa; font-size: 14px; display: flex; align-items: flex-start; gap: 8px;">
+                    <i class="ph-fill ph-map-pin" style="color: var(--primary); font-size: 18px; flex-shrink: 0; margin-top: 2px;"></i>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Anytime+Fitness+Eco+Ardence,+Eco+Ardence,+H4,+3rd+Floor,+Hana+Square,+Jln+U13%2F55D,+40170+Shah+Alam,+Selangor" target="_blank" style="color: #aaa; text-decoration: none; line-height: 1.5; transition: color 0.3s;">Anytime Fitness Eco Ardence, Eco Ardence, H4, 3rd Floor, Hana Square, Jln U13/55D, 40170 Shah Alam, Selangor</a>
+                </li>
                 <li style="color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 8px;">
                     <i class="ph-fill ph-phone" style="color: var(--primary); font-size: 18px;"></i>
                     <a href="tel:0177948089" style="color: #aaa; text-decoration: none;">0177948089 - Ain Syafinaz</a>

@@ -9,6 +9,7 @@ $this->disableAutoLayout();
     <title>Class Schedule - Anytime Fitness</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         .schedule-container {
@@ -18,7 +19,8 @@ $this->disableAutoLayout();
         }
         .class-card {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 24px;
@@ -27,13 +29,14 @@ $this->disableAutoLayout();
             align-items: center;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            box-shadow: var(--glass-shadow);
-            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: all 0.4s ease;
         }
         .class-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-8px);
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 40px -10px rgba(138,43,226,0.2);
         }
         .class-info h3 { margin: 0 0 5px 0; color: white; font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 600; }
         .class-details { color: #aaa; font-size: 14px; display: flex; gap: 20px; margin-top: 10px; }
@@ -142,8 +145,8 @@ $this->disableAutoLayout();
     <div class="schedule-container">
         <?= $this->Flash->render() ?>
 
-        <h1 style="margin-bottom: 10px; font-family: 'Outfit', sans-serif; font-weight: 700;">Upcoming Classes</h1>
-        <p style="color: #aaa; margin-bottom: 30px; font-family: 'Inter', sans-serif;">Reserve your spot in our premium group sessions.</p>
+        <h1 class="reveal" style="margin-bottom: 10px; font-family: 'Outfit', sans-serif; font-weight: 700;">Upcoming <span class="text-gradient">Classes</span></h1>
+        <p class="reveal" style="color: #aaa; margin-bottom: 30px; font-family: 'Inter', sans-serif;">Reserve your spot in our premium group sessions.</p>
 
         <?php if ($user && $membershipStatus): ?>
             <?php
@@ -153,7 +156,7 @@ $this->disableAutoLayout();
                 $daysLeft  = $expired ? 0 : (int)$today->diff($endDate)->days;
                 $mStatus   = strtolower($membershipStatus->Status ?? '');
             ?>
-            <div class="membership-banner <?= $expired ? 'expired' : '' ?>">
+            <div class="membership-banner reveal <?= $expired ? 'expired' : '' ?>">
                 <div class="banner-info">
                     <i class="ph ph-identification-card banner-icon" style="color: <?= $expired ? '#e74c3c' : 'var(--primary)' ?>;"></i>
                     <div class="banner-text">
@@ -178,7 +181,7 @@ $this->disableAutoLayout();
                 </a>
             </div>
         <?php elseif ($user): ?>
-            <div class="membership-banner">
+            <div class="membership-banner reveal">
                 <div class="banner-info">
                     <i class="ph ph-warning banner-icon" style="color: #f39c12;"></i>
                     <div class="banner-text">
@@ -198,7 +201,7 @@ $this->disableAutoLayout();
                 $isFull = $booked >= $class->Capacity;
                 $percent = ($class->Capacity > 0) ? min(100, ($booked / $class->Capacity) * 100) : 0;
             ?>
-            <div class="class-card">
+            <div class="class-card reveal">
                 <div class="class-info">
                     <h3><?= h($class->ClassName) ?></h3>
                     <div class="class-details">

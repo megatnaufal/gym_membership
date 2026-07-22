@@ -1,9 +1,9 @@
 <?php
 $this->assign('title', 'Admin Analytics Dashboard');
 ?>
-<div class="page-header" style="display:flex; justify-content:space-between; align-items:center;">
+<div class="page-header reveal" style="display:flex; justify-content:space-between; align-items:center;">
     <div>
-        <h1>Admin Analytics Dashboard</h1>
+        <h1>Admin Analytics <span class="text-gradient">Dashboard</span></h1>
         <p>Here's what's happening with your gym.</p>
     </div>
     <a href="<?= $this->Url->build('/admin/scanner') ?>" class="action-btn" style="padding: 10px 20px; background: var(--primary); color: white; border-radius: 8px; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: bold;">
@@ -13,7 +13,7 @@ $this->assign('title', 'Admin Analytics Dashboard');
 </div>
 
 <!-- Metrics -->
-<div class="metrics-grid">
+<div class="metrics-grid reveal">
     <div class="metric-card">
         <div class="metric-icon users">
             <i class="ph ph-users"></i>
@@ -55,15 +55,15 @@ $this->assign('title', 'Admin Analytics Dashboard');
     </div>
 </div>
 
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 30px;">
+<div class="reveal" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 30px;">
     <!-- Revenue Chart -->
-    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;">
+    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); border-radius: 16px; padding: 24px;">
         <h2 style="margin: 0 0 20px 0; font-family: 'Outfit', sans-serif; font-size: 20px; color: var(--primary);">Monthly Revenue (Last 6 Months)</h2>
         <canvas id="revenueChart" height="100"></canvas>
     </div>
 
     <!-- Class Popularity Chart -->
-    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;">
+    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); border-radius: 16px; padding: 24px;">
         <h2 style="margin: 0 0 20px 0; font-family: 'Outfit', sans-serif; font-size: 20px; color: var(--primary);">Top 5 Classes</h2>
         <canvas id="classChart" height="220"></canvas>
     </div>

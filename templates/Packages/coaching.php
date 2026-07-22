@@ -16,6 +16,7 @@ $this->disableAutoLayout();
     
     <?= $this->Html->css(['anytime_home', 'anytime_coaching']) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <style>
         .trainer-grid {
             display: grid;
@@ -27,12 +28,20 @@ $this->disableAutoLayout();
         }
         .trainer-card {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 35px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            box-shadow: var(--glass-shadow);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .trainer-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 30px 60px -15px rgba(138,43,226,0.3);
+            background: rgba(255,255,255,0.06);
         }
         .trainer-header {
             display: flex;
@@ -154,11 +163,14 @@ $this->disableAutoLayout();
     <!-- Navigation -->
     <?= $this->element('navbar', ['active' => 'coaching']) ?>
 
-    <!-- Header -->
-    <header class="pricing-header">
-        <h1>Book 1-on-1 Coaching</h1>
-        <p>Take your training to the next level. Book our expert trainers on their off-days for dedicated, personalized attention.</p>
-    </header>
+    <!-- Premium Header -->
+    <div class="trainer-hero reveal" style="position: relative; padding: 140px 20px 100px; text-align: center; background: linear-gradient(to bottom, rgba(138,43,226,0.05), var(--bg-dark)); border-bottom: 1px solid var(--glass-border); overflow: hidden;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; height: 80vw; max-width: 1000px; max-height: 1000px; background: radial-gradient(circle, rgba(138,43,226,0.15) 0%, transparent 70%); z-index: 0; pointer-events: none;"></div>
+        <div style="position: relative; z-index: 1;">
+            <h1 style="font-size: 54px; font-weight: 800; font-family: 'Outfit', sans-serif; margin-bottom: 20px; letter-spacing: -1px;">Book 1-on-1 <span class="text-gradient">Coaching</span></h1>
+            <p style="font-size: 18px; color: #aaa; max-width: 600px; margin: 0 auto;">Take your training to the next level. Book our expert trainers on their off-days for dedicated, personalized attention.</p>
+        </div>
+    </div>
 
     <div class="flash-container">
         <?= $this->Flash->render() ?>

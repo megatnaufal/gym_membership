@@ -33,6 +33,7 @@ if ($membership) {
     <title>Membership Status - Anytime Fitness</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         body { background: var(--bg-dark); color: white; }
@@ -47,15 +48,17 @@ if ($membership) {
         /* ── Status card ── */
         .status-card {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             padding: 40px;
             margin-bottom: 32px;
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            box-shadow: var(--glass-shadow);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             position: relative;
             overflow: hidden;
+            animation: pulse-glow 4s infinite;
         }
         .status-card::before {
             content: '';
@@ -137,10 +140,11 @@ if ($membership) {
         .section-header h2 { font-size: 26px; font-weight: 700; font-family: 'Outfit', sans-serif; }
         .bookings-table-wrap {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: var(--glass-shadow);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
@@ -199,15 +203,15 @@ if ($membership) {
 <!-- Page Content -->
 <div class="page-wrapper">
 
-    <div class="page-heading">
-        <h1><i class="ph ph-identification-card" style="color:var(--primary);"></i> Membership Status</h1>
+    <div class="page-heading reveal">
+        <h1><i class="ph ph-identification-card" style="color:var(--primary);"></i> Membership <span class="text-gradient">Status</span></h1>
         <p>Welcome back, <?= h($user->FullName) ?>. Here are your current membership details.</p>
     </div>
 
     <?= $this->Flash->render() ?>
 
     <!-- ── Digital Pass ── -->
-    <div style="background: linear-gradient(135deg, rgba(138,43,226,.15) 0%, rgba(0,210,255,.08) 100%); border: 1px solid rgba(138,43,226,.3); border-radius: 24px; padding: 32px 40px; margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; gap: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+    <div class="reveal" style="background: linear-gradient(135deg, rgba(138,43,226,.15) 0%, rgba(0,210,255,.08) 100%); border: 1px solid rgba(138,43,226,.3); border-radius: 24px; padding: 32px 40px; margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; gap: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
         <div>
             <h2 style="margin: 0 0 8px 0; font-family: 'Outfit', sans-serif; font-size: 28px; color: white; display: flex; align-items: center; gap: 10px;">
                 <i class="ph-fill ph-check-badge" style="color: var(--primary);"></i> Digital Pass
@@ -233,7 +237,7 @@ if ($membership) {
                 $badgeClass = 'badge-active';
             }
         ?>
-        <div class="status-card <?= $cardClass ?>">
+        <div class="status-card reveal <?= $cardClass ?>">
 
             <span class="status-badge-lg <?= $badgeClass ?>">
                 <i class="ph ph-<?= $isExpired ? 'warning' : ($status === 'active' ? 'check-circle' : 'clock') ?>"></i>
@@ -299,14 +303,14 @@ if ($membership) {
     <?php endif; ?>
 
     <!-- ── Booked Classes ── -->
-    <div class="section-header">
-        <h2><i class="ph ph-calendar-check" style="color:var(--primary);"></i> My Booked Classes</h2>
+    <div class="section-header reveal" id="booked-classes">
+        <h2><i class="ph ph-calendar-check" style="color:var(--primary);"></i> My <span class="text-gradient">Booked Classes</span></h2>
         <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding:10px 20px; font-size:13px;">
             <i class="ph ph-plus"></i> Book a Class
         </a>
     </div>
 
-    <div class="bookings-table-wrap">
+    <div class="bookings-table-wrap reveal">
         <?php if (!empty($bookings)): ?>
         <table>
             <thead>

@@ -13,6 +13,7 @@ $this->disableAutoLayout();
     <!-- Using Phosphor Icons for modern premium icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <?= $this->Html->script('animations', ['defer' => true]) ?>
 
     <style>
         /* My Classes Section */
@@ -107,52 +108,60 @@ $this->disableAutoLayout();
             <?php if (!empty($user)): ?>
                 <h1>Welcome Back, <?= h(explode(' ', $user->FullName)[0]) ?>!</h1>
                 
-                <?php if (!empty($activeMembership) && strtolower($activeMembership->Status ?? '') === 'active'): ?>
-                    <div style="margin: 18px 0 24px; background: rgba(0, 210, 255, 0.15); border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 14px; padding: 16px 24px; display: inline-flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); text-align: left; box-shadow: 0 4px 20px rgba(0,210,255,0.2);">
-                        <i class="ph-fill ph-shield-check" style="font-size: 32px; color: var(--secondary);"></i>
-                        <div>
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); font-weight: 700; font-family: 'Outfit', sans-serif;">Active Membership</div>
-                            <div style="font-size: 17px; font-weight: 700; color: white; font-family: 'Outfit', sans-serif;">
-                                <?= h($activeMembership->package->PackageName ?? 'Gym Pass') ?>
+                <?php if (strtolower($user->Role ?? '') === 'member'): ?>
+                    <?php if (!empty($activeMembership) && strtolower($activeMembership->Status ?? '') === 'active'): ?>
+                        <div style="margin: 18px 0 24px; background: rgba(0, 210, 255, 0.15); border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 14px; padding: 16px 24px; display: inline-flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); text-align: left; box-shadow: 0 4px 20px rgba(0,210,255,0.2);">
+                            <i class="ph-fill ph-shield-check" style="font-size: 32px; color: var(--secondary);"></i>
+                            <div>
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); font-weight: 700; font-family: 'Outfit', sans-serif;">Active Membership</div>
+                                <div style="font-size: 17px; font-weight: 700; color: white; font-family: 'Outfit', sans-serif;">
+                                    <?= h($activeMembership->package->PackageName ?? 'Gym Pass') ?>
+                                </div>
+                                <div style="font-size: 12px; color: #bbb; margin-top: 2px;">
+                                    Valid until <strong><?= h($activeMembership->EndDate->format('d M Y')) ?></strong>
+                                </div>
                             </div>
-                            <div style="font-size: 12px; color: #bbb; margin-top: 2px;">
-                                Valid until <strong><?= h($activeMembership->EndDate->format('d M Y')) ?></strong>
+                            <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn" style="margin-left: 12px; background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 16px; font-size: 13px; text-decoration: none; font-weight: 600;">
+                                Manage
+                            </a>
+                        </div>
+                    <?php else: ?>
+                        <div style="margin: 18px 0 24px; background: rgba(231, 76, 60, 0.15); border: 1px solid rgba(231, 76, 60, 0.4); border-radius: 14px; padding: 16px 24px; display: inline-flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); text-align: left;">
+                            <i class="ph-fill ph-warning-circle" style="font-size: 32px; color: #e74c3c;"></i>
+                            <div>
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #e74c3c; font-weight: 700;">No Active Membership</div>
+                                <div style="font-size: 14px; color: white;">Join a membership plan to unlock 24/7 access & class bookings.</div>
                             </div>
+                            <a href="#pricing" class="btn btn-primary" style="margin-left: 12px; padding: 8px 16px; font-size: 13px; text-decoration: none; font-weight: 600;">
+                                Get Access
+                            </a>
                         </div>
-                        <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn" style="margin-left: 12px; background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 16px; font-size: 13px; text-decoration: none; font-weight: 600;">
-                            Manage
-                        </a>
-                    </div>
-                <?php else: ?>
-                    <div style="margin: 18px 0 24px; background: rgba(231, 76, 60, 0.15); border: 1px solid rgba(231, 76, 60, 0.4); border-radius: 14px; padding: 16px 24px; display: inline-flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); text-align: left;">
-                        <i class="ph-fill ph-warning-circle" style="font-size: 32px; color: #e74c3c;"></i>
-                        <div>
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #e74c3c; font-weight: 700;">No Active Membership</div>
-                            <div style="font-size: 14px; color: white;">Join a membership plan to unlock 24/7 access & class bookings.</div>
-                        </div>
-                        <a href="#pricing" class="btn btn-primary" style="margin-left: 12px; padding: 8px 16px; font-size: 13px; text-decoration: none; font-weight: 600;">
-                            Get Access
-                        </a>
-                    </div>
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <div style="display: flex; gap: 12px; justify-content: center;">
-                    <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary">View Class Schedule</a>
-                    <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white;">Digital Pass & Status</a>
+                    <?php if (strtolower($user->Role ?? '') === 'trainer'): ?>
+                        <a href="<?= $this->Url->build('/trainer') ?>" class="btn btn-primary" style="animation: float 6s ease-in-out infinite;">Go to Trainer Portal</a>
+                    <?php elseif (strtolower($user->Role ?? '') === 'admin'): ?>
+                        <a href="<?= $this->Url->build('/admin') ?>" class="btn btn-primary" style="animation: float 6s ease-in-out infinite;">Go to Admin Portal</a>
+                    <?php else: ?>
+                        <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary">View Class Schedule</a>
+                        <a href="<?= $this->Url->build('/memberships/status') ?>" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white;">Digital Pass & Status</a>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
-                <h1 style="font-family: 'Outfit', sans-serif;">Elevate Your Fitness Journey</h1>
-                <p>Experience a premium, judgment-free environment designed for your success. State-of-the-art facilities, expert coaching, and a thriving community await.</p>
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
-                    <a href="#pricing" class="btn btn-primary">Join Now</a>
+                <h1 style="font-family: 'Outfit', sans-serif;" class="reveal">Elevate Your <span class="text-gradient">Fitness Journey</span></h1>
+                <p class="reveal">Experience a premium, judgment-free environment designed for your success. State-of-the-art facilities, expert coaching, and a thriving community await.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;" class="reveal">
+                    <a href="#pricing" class="btn btn-primary" style="animation: float 6s ease-in-out infinite;">Join Now</a>
                     <a href="#trainers" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Meet Trainers</a>
                 </div>
             <?php endif; ?>
         </div>
     </section>
 
-    <!-- MY CLASSES SECTION (only shown when logged in) -->
-    <?php if (!empty($user)): ?>
+    <!-- MY CLASSES SECTION (only shown when logged in and is a member) -->
+    <?php if (!empty($user) && strtolower($user->Role ?? '') === 'member'): ?>
     <section class="my-classes-section">
         <h2 class="section-title">My <span>Booked Classes</span></h2>
 
@@ -204,8 +213,8 @@ $this->disableAutoLayout();
     <?php endif; ?>
 
     <!-- Features Section -->
-    <section id="about" class="features" style="padding: 100px 50px;">
-        <h2 class="section-title" style="font-family: 'Outfit', sans-serif;">Everything You <span>Need</span></h2>
+    <section id="about" class="features reveal" style="padding: 100px 50px;">
+        <h2 class="section-title" style="font-family: 'Outfit', sans-serif;">Everything You <span class="text-gradient">Need</span></h2>
         
         <div class="grid">
             <div class="card">
@@ -227,8 +236,8 @@ $this->disableAutoLayout();
             </div>
         </div>
     <!-- Membership Plans & Pricing Section -->
-    <section id="pricing" class="pricing-section" style="padding: 80px 50px 40px; max-width: 1200px; margin: 0 auto;">
-        <h2 class="section-title">Membership <span>Plans &amp; Access</span></h2>
+    <section id="pricing" class="pricing-section reveal" style="padding: 80px 50px 40px; max-width: 1200px; margin: 0 auto;">
+        <h2 class="section-title">Membership <span class="text-gradient">Plans &amp; Access</span></h2>
         <p style="text-align: center; color: #aaa; margin-top: -30px; margin-bottom: 50px; font-size: 16px;">
             Choose the membership tier that fits your fitness journey. Instant key fob access included.
         </p>
@@ -240,7 +249,7 @@ $this->disableAutoLayout();
                         $isBasic = strtolower($pkg->PackageName ?? '') === 'basic gym access';
                         $isPopular = strtolower($pkg->PackageName ?? '') === 'unlimited group classes';
                     ?>
-                    <div class="pricing-card" style="background: var(--glass-bg); border: 1px solid <?= $isPopular ? 'var(--primary)' : 'var(--glass-border)' ?>; border-radius: 24px; padding: 40px 30px; position: relative; display: flex; flex-direction: column; backdrop-filter: blur(16px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: <?= $isPopular ? '0 10px 40px rgba(138,43,226,0.2)' : 'var(--glass-shadow)' ?>;">
+                    <div class="pricing-card" style="background: var(--glass-bg); border: 1px solid <?= $isPopular ? 'var(--primary)' : 'rgba(255,255,255,0.05)' ?>; border-top: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 40px 30px; position: relative; display: flex; flex-direction: column; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: <?= $isPopular ? '0 10px 40px rgba(138,43,226,0.3)' : '0 20px 40px -10px rgba(0,0,0,0.4)' ?>; <?= $isPopular ? 'animation: pulse-glow 4s infinite;' : '' ?>">
                         
                         <?php if ($isPopular): ?>
                             <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 6px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(138,43,226,0.4);">
@@ -295,33 +304,54 @@ $this->disableAutoLayout();
     </section>
 
     <!-- Trainers Section -->
-    <section id="trainers" class="trainers-section" style="padding: 100px 50px 50px; background: var(--bg-dark); max-width: 1200px; margin: 0 auto;">
-        <h2 class="section-title">Meet Our <span>Expert Trainers</span></h2>
+    <section id="trainers" class="trainers-section reveal" style="padding: 100px 50px 50px; background: var(--bg-dark); max-width: 1200px; margin: 0 auto;">
+        <h2 class="section-title">Meet Our <span class="text-gradient">Expert Trainers</span></h2>
         
+        <style>
+            .trainer-card {
+                display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
+            }
+            .trainer-card:hover {
+                transform: translateY(-15px); box-shadow: 0 30px 60px -15px rgba(138,43,226,0.3); border-color: rgba(255,255,255,0.15);
+            }
+            .trainer-card img {
+                transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            .trainer-card:hover img {
+                transform: scale(1.08);
+            }
+        </style>
+
         <div class="trainer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
             <!-- Trainer 1 -->
-            <div class="trainer-card" style="display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
-                <?= $this->Html->image('trainer_1.png', ['alt' => 'Trainer 1', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; border-bottom: 3px solid var(--primary);']) ?>
+            <div class="trainer-card">
+                <div style="overflow: hidden; border-bottom: 3px solid var(--primary);">
+                    <?= $this->Html->image('trainer_1.png', ['alt' => 'Trainer 1', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; display: block;']) ?>
+                </div>
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Ain Syafinaz</h3>
-                <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">Lead Strength Coach</p>
+                <p style="color: var(--secondary); font-weight: 600; margin-bottom: 15px;">Lead Strength Coach</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Specializes in powerlifting and bodybuilding. Ain helps you build the ultimate foundation of strength.</p>
                 <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
             
             <!-- Trainer 2 -->
-            <div class="trainer-card" style="display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
-                <?= $this->Html->image('trainer_2.png', ['alt' => 'Trainer 2', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; border-bottom: 3px solid var(--primary);']) ?>
+            <div class="trainer-card">
+                <div style="overflow: hidden; border-bottom: 3px solid var(--primary);">
+                    <?= $this->Html->image('trainer_2.png', ['alt' => 'Trainer 2', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; display: block;']) ?>
+                </div>
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Nurliyana Najwa</h3>
-                <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">HIIT &amp; Mobility Specialist</p>
+                <p style="color: var(--secondary); font-weight: 600; margin-bottom: 15px;">HIIT &amp; Mobility Specialist</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Focuses on functional fitness, mobility, and high-intensity interval training for maximum fat burn.</p>
                 <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
             
             <!-- Trainer 3 -->
-            <div class="trainer-card" style="display: flex; flex-direction: column; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 20px; transition: transform 0.3s ease;">
-                <?= $this->Html->image('trainer_3.png', ['alt' => 'Trainer 3', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; border-bottom: 3px solid var(--primary);']) ?>
+            <div class="trainer-card">
+                <div style="overflow: hidden; border-bottom: 3px solid var(--primary);">
+                    <?= $this->Html->image('trainer_3.png', ['alt' => 'Trainer 3', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; display: block;']) ?>
+                </div>
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Faris Afizuan</h3>
-                <p style="color: var(--primary); font-weight: 600; margin-bottom: 15px;">Transformation Expert</p>
+                <p style="color: var(--secondary); font-weight: 600; margin-bottom: 15px;">Transformation Expert</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Dedicated to complete body transformations through tailored nutrition and strategic training protocols.</p>
                 <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
@@ -344,7 +374,6 @@ $this->disableAutoLayout();
                     setTimeout(function () { banner.style.display = 'none'; }, 600);
                 }, 5000);
             });
-        });
     </script>
 
     <?php if (empty($user)): ?>

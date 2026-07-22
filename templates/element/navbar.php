@@ -57,6 +57,7 @@ $user = $user ?? $this->request->getSession()->read('Auth.User');
                         <a href="<?= $this->Url->build('/trainer') ?>" style="color: #2ecc71;"><i class="ph ph-chalkboard-teacher"></i> Trainer Portal</a>
                     <?php endif; ?>
                     <a href="<?= $this->Url->build('/schedule') ?>"><i class="ph ph-calendar-check"></i> Class Schedule</a>
+                    <a href="<?= $this->Url->build('/memberships/status#booked-classes') ?>"><i class="ph ph-notebook"></i> My Booked Classes</a>
                     <a href="<?= $this->Url->build('/memberships/status') ?>"><i class="ph ph-identification-card"></i> Membership Status</a>
                     <div class="dropdown-divider"></div>
                     <a href="<?= $this->Url->build('/users/logout') ?>" style="color: #e74c3c;"><i class="ph ph-sign-out"></i> Log Out</a>
