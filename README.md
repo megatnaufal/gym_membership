@@ -23,6 +23,17 @@
 
 This repository contains the source code for the Anytime Fitness Gym Membership Management System, built using the [CakePHP](https://cakephp.org) framework.
 
+## Test Accounts
+For testing and grading purposes, you can use the following pre-configured accounts:
+
+**Member Account**
+- **Email:** `megat@gmail.com`
+- **Password:** `password123`
+
+**Trainer Account**
+- **Email:** `ain@anytimefitness.com`
+- **Password:** `password123`
+
 ## Features
 - **Public Website:** Home page, trainer profiles, membership plans, and private coaching details.
 - **Member Dashboard:** Members can manage their active plans, book classes, and check their membership status.
