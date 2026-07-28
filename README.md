@@ -33,5 +33,25 @@ This repository contains the source code for the Anytime Fitness Gym Membership 
 - Composer
 - MySQL/MariaDB database
 
+## SUBJECT:
+SYSTEMS ANALYSIS AND DESIGN IN INFORMATION MANAGEMENT (IMS613)
+
+## GROUP ASSIGNMENT:
+GYM MEMBERSHIP
+
+## PREPARED FOR:
+SIR AHMAD NAZRI BIN MANSOR
+
+## PREPARED BY:
+NAME	                                    ID
+FARIS AFIZUAN BIN ABD KAHARMUZAKIR   	2025136615
+MEGAT NAUFAL SYABIL BIN ZAMRI	        2025121211
+NURLIYANA NAJWA BINTI ROSLAN 	        2025381073
+NURUL AIN SYAFINAZ BINTI MD THANI    	2025165683
+
+## GROUP:
+CDIM2625A
+
+
 ## Disclaimer
 This project is an academic assignment. All Anytime Fitness branding, logos, and trademarks belong to their respective owners and are used here for educational demonstration purposes only.
