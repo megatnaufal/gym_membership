@@ -1,53 +1,37 @@
-# CakePHP Application Skeleton
+# Anytime Fitness - Gym Membership Management System
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
+This repository contains the source code for the Anytime Fitness Gym Membership Management System, built using the [CakePHP](https://cakephp.org) framework.
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 5.x.
+> [!IMPORTANT]
+> **Note: This project is created as an academic assignment and is for educational purposes only.**
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+## Features
+- **Public Website:** Home page, trainer profiles, membership plans, and private coaching details.
+- **Member Dashboard:** Members can manage their active plans, book classes, and check their membership status.
+- **Trainer Portal:** Trainers can manage their classes and view attendees.
+- **Admin Dashboard:** Comprehensive system management for packages, users, bookings, and physical check-ins.
 
 ## Installation
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/megatnaufal/gym_membership.git
+   ```
+2. Run Composer install to download dependencies:
+   ```bash
+   composer install
+   ```
+3. Set up your database and configure your `config/app_local.php` file to connect to your local MySQL database.
+4. Start the local server:
+   ```bash
+   bin/cake server -p 8765
+   ```
+5. Visit `http://localhost:8765` to view the website!
 
-If Composer is installed globally, run
+## Requirements
+- PHP 8.1 or higher
+- Composer
+- MySQL/MariaDB database
 
-```bash
-composer create-project --prefer-dist cakephp/app
-```
-
-In case you want to use a custom app dir name (e.g. `/myapp/`):
-
-```bash
-composer create-project --prefer-dist cakephp/app myapp
-```
-
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
-
-```bash
-bin/cake server -p 8765
-```
-
-Then visit `http://localhost:8765` to see the welcome page.
-
-## Update
-
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
-
-## Configuration
-
-Read and edit the environment specific `config/app_local.php` and set up the
-`'Datasources'` and any other configuration relevant for your application.
-Other environment agnostic settings can be changed in `config/app.php`.
-
-## Layout
-
-The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+## Disclaimer
+This project is an academic assignment. All Anytime Fitness branding, logos, and trademarks belong to their respective owners and are used here for educational demonstration purposes only.
