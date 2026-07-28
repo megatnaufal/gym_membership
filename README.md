@@ -27,11 +27,11 @@ This repository contains the source code for the Anytime Fitness Gym Membership 
 For testing and grading purposes, you can use the following pre-configured accounts:
 
 **Member Account**
-- **Username:** `megat@gmail.com`
+- **Username:** `megat`
 - **Password:** `password123`
 
 **Trainer Account**
-- **Username:** `ain@anytimefitness.com`
+- **Username:** `ainsyafinaz`
 - **Password:** `password123`
 
 ## Features
