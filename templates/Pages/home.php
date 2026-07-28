@@ -304,7 +304,7 @@ $this->disableAutoLayout();
     </section>
 
     <!-- Trainers Section -->
-    <section id="trainers" class="trainers-section reveal" style="padding: 100px 50px 50px; background: var(--bg-dark); max-width: 1200px; margin: 0 auto;">
+    <section id="trainers" class="trainers-section reveal" style="padding: 100px 50px 50px; background: var(--bg-dark); max-width: 1400px; margin: 0 auto;">
         <h2 class="section-title">Meet Our <span class="text-gradient">Expert Trainers</span></h2>
         
         <style>
@@ -322,7 +322,7 @@ $this->disableAutoLayout();
             }
         </style>
 
-        <div class="trainer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+        <div class="trainer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
             <!-- Trainer 1 -->
             <div class="trainer-card">
                 <div style="overflow: hidden; border-bottom: 3px solid var(--primary);">
@@ -353,6 +353,17 @@ $this->disableAutoLayout();
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Faris Afizuan</h3>
                 <p style="color: var(--secondary); font-weight: 600; margin-bottom: 15px;">Transformation Expert</p>
                 <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Dedicated to complete body transformations through tailored nutrition and strategic training protocols.</p>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
+            </div>
+            
+            <!-- Trainer 4 -->
+            <div class="trainer-card">
+                <div style="overflow: hidden; border-bottom: 3px solid var(--primary);">
+                    <?= $this->Html->image('trainer_4.png', ['alt' => 'Trainer 4', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; display: block;']) ?>
+                </div>
+                <h3 style="margin: 20px 0 5px; font-size: 24px;">Megat Naufal</h3>
+                <p style="color: var(--secondary); font-weight: 600; margin-bottom: 15px;">Muscle Building & Body Recomposition Coach</p>
+                <p style="padding: 0 20px; color: #ccc; font-size: 14px;">Expert in hypertrophy and body recomposition to help you achieve your ultimate aesthetic physique.</p>
                 <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; margin-top: auto; align-self: center;">Book Session</a>
             </div>
         </div>

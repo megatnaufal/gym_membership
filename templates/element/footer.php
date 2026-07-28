@@ -10,8 +10,8 @@
                 Transform your life with world-class facilities, expert coaching, and a supportive community. Your fitness journey starts here.
             </p>
             <div style="display: flex; gap: 15px;">
-                <a href="https://web.facebook.com/nurliyananajwa.roslan" style="color: white; font-size: 24px; transition: color 0.3s;" target="_blank"><i class="ph-fill ph-facebook-logo"></i></a>
-                <a href="https://www.instagram.com/farissafizuan/" style="color: white; font-size: 24px; transition: color 0.3s;" target="_blank"><i class="ph-fill ph-instagram-logo"></i></a>
+                <a href="https://www.facebook.com/anytimefitnessecoardence/" style="color: white; font-size: 24px; transition: color 0.3s;" target="_blank"><i class="ph-fill ph-facebook-logo"></i></a>
+                <a href="https://www.instagram.com/af.ecoardence/?hl=en" style="color: white; font-size: 24px; transition: color 0.3s;" target="_blank"><i class="ph-fill ph-instagram-logo"></i></a>
                 <a href="#" style="color: white; font-size: 24px; transition: color 0.3s;"><i class="ph-fill ph-twitter-logo"></i></a>
             </div>
         </div>
@@ -36,8 +36,8 @@
                     <a href="https://www.google.com/maps/search/?api=1&query=Anytime+Fitness+Eco+Ardence,+Eco+Ardence,+H4,+3rd+Floor,+Hana+Square,+Jln+U13%2F55D,+40170+Shah+Alam,+Selangor" target="_blank" style="color: #aaa; text-decoration: none; line-height: 1.5; transition: color 0.3s;">Anytime Fitness Eco Ardence, Eco Ardence, H4, 3rd Floor, Hana Square, Jln U13/55D, 40170 Shah Alam, Selangor</a>
                 </li>
                 <li style="color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 8px;">
-                    <i class="ph-fill ph-phone" style="color: var(--primary); font-size: 18px;"></i>
-                    <a href="tel:0177948089" style="color: #aaa; text-decoration: none;">0177948089 - Ain Syafinaz</a>
+                    <i class="ph-fill ph-printer" style="color: var(--primary); font-size: 18px;"></i>
+                    <span style="color: #aaa;">Fax: 038894660</span>
                 </li>
                 <li style="color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 8px;">
                     <i class="ph-fill ph-envelope" style="color: var(--primary); font-size: 18px;"></i>

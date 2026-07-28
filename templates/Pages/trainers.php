@@ -157,9 +157,9 @@ $this->disableAutoLayout();
     </div>
 
     <!-- Trainers Section -->
-    <section class="trainers-section" style="padding: 80px 50px 100px; max-width: 1200px; margin: 0 auto;">
+    <section class="trainers-section" style="padding: 80px 50px 100px; max-width: 1400px; margin: 0 auto;">
         
-        <div class="trainer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
+        <div class="trainer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
             <!-- Trainer 1 -->
             <div class="trainer-card reveal">
                 <div class="trainer-img-wrapper">
@@ -205,6 +205,22 @@ $this->disableAutoLayout();
                 <h3 class="trainer-name">Faris Afizuan</h3>
                 <p class="trainer-role">Transformation Expert</p>
                 <p class="trainer-bio">Dedicated to complete body transformations through tailored nutrition and strategic training protocols.</p>
+                <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px; align-self: center;">Book Session</a>
+            </div>
+            
+            <!-- Trainer 4 -->
+            <div class="trainer-card reveal" style="transition-delay: 0.3s;">
+                <div class="trainer-img-wrapper">
+                    <?= $this->Html->image('trainer_4.png', ['alt' => 'Trainer 4']) ?>
+                    <div class="trainer-socials">
+                        <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                        <a href="#"><i class="ph ph-tiktok-logo"></i></a>
+                        <a href="#"><i class="ph ph-twitter-logo"></i></a>
+                    </div>
+                </div>
+                <h3 class="trainer-name">Megat Naufal</h3>
+                <p class="trainer-role">Muscle Building & Body Recomposition Coach</p>
+                <p class="trainer-bio">Expert in hypertrophy and body recomposition to help you achieve your ultimate aesthetic physique.</p>
                 <a href="<?= $this->Url->build('/schedule') ?>" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px; align-self: center;">Book Session</a>
             </div>
         </div>
