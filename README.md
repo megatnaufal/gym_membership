@@ -1,9 +1,27 @@
 # Anytime Fitness - Gym Membership Management System
 
-This repository contains the source code for the Anytime Fitness Gym Membership Management System, built using the [CakePHP](https://cakephp.org) framework.
-
 > [!IMPORTANT]
 > **Note: This project is created as an academic assignment and is for educational purposes only.**
+
+## Assignment Details
+
+**Course:** SYSTEMS ANALYSIS AND DESIGN IN INFORMATION MANAGEMENT (IMS613)  
+**Group Assignment:** GYM MEMBERSHIP  
+**Prepared For:** SIR AHMAD NAZRI BIN MANSOR  
+**Group:** CDIM2625A  
+
+**Prepared By:**
+
+| Name | Student ID |
+| :--- | :--- |
+| FARIS AFIZUAN BIN ABD KAHARMUZAKIR | 2025136615 |
+| MEGAT NAUFAL SYABIL BIN ZAMRI | 2025121211 |
+| NURLIYANA NAJWA BINTI ROSLAN | 2025381073 |
+| NURUL AIN SYAFINAZ BINTI MD THANI | 2025165683 |
+
+---
+
+This repository contains the source code for the Anytime Fitness Gym Membership Management System, built using the [CakePHP](https://cakephp.org) framework.
 
 ## Features
 - **Public Website:** Home page, trainer profiles, membership plans, and private coaching details.
@@ -32,26 +50,6 @@ This repository contains the source code for the Anytime Fitness Gym Membership 
 - PHP 8.1 or higher
 - Composer
 - MySQL/MariaDB database
-
-## SUBJECT:
-SYSTEMS ANALYSIS AND DESIGN IN INFORMATION MANAGEMENT (IMS613)
-
-## GROUP ASSIGNMENT:
-GYM MEMBERSHIP
-
-## PREPARED FOR:
-SIR AHMAD NAZRI BIN MANSOR
-
-## PREPARED BY:
-NAME	                                    ID
-FARIS AFIZUAN BIN ABD KAHARMUZAKIR   	2025136615
-MEGAT NAUFAL SYABIL BIN ZAMRI	        2025121211
-NURLIYANA NAJWA BINTI ROSLAN 	        2025381073
-NURUL AIN SYAFINAZ BINTI MD THANI    	2025165683
-
-## GROUP:
-CDIM2625A
-
 
 ## Disclaimer
 This project is an academic assignment. All Anytime Fitness branding, logos, and trademarks belong to their respective owners and are used here for educational demonstration purposes only.
