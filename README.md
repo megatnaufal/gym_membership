@@ -42,20 +42,20 @@ For testing and grading purposes, you can use the following pre-configured accou
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/megatnaufal/gym_membership.git
-   ```
+1. Clone the repository OR extract the ZIP file.
 2. Run Composer install to download dependencies:
    ```bash
    composer install
    ```
-3. Set up your database and configure your `config/app_local.php` file to connect to your local MySQL database.
-4. Start the local server:
+3. Set up your database:
+   - Create a new MySQL database named `gym_membership`.
+   - Import the provided `gym_membership.sql` file into your database.
+4. Configure your `config/app_local.php` file to connect to your local MySQL database if your database credentials differ.
+5. Start the local server:
    ```bash
    bin/cake server -p 8765
    ```
-5. Visit `http://localhost:8765` to view the website!
+6. Visit `http://localhost:8765` to view the website!
 
 ## Requirements
 - PHP 8.1 or higher
