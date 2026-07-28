@@ -12,7 +12,7 @@ $user = $user ?? $this->request->getSession()->read('Auth.User');
 <nav class="navbar" style="background: rgba(15, 15, 17, 0.95); position: sticky; z-index: 100;">
     <div class="nav-brand">
         <a href="<?= $this->Url->build('/') ?>" style="display: flex; align-items: center; gap: 10px;">
-            <img src="<?= $this->Url->assetUrl('favicon.ico') ?>" alt="Logo" style="height: 32px; width: auto;">
+            <?= $this->Html->image('brand_logo.png', ['alt' => 'Logo', 'style' => 'height: 32px; width: auto;']) ?>
             <div>Anytime<span style="color: var(--primary);">Fitness</span></div>
         </a>
     </div>

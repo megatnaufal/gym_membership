@@ -7,6 +7,7 @@ $this->disableAutoLayout();
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Anytime Fitness - Your Judgment-Free Gym</title>
+    <link rel="icon" type="image/x-icon" href="<?= $this->Url->assetUrl('favicon.ico?v=' . time()) ?>">
     
     <?= $this->Html->css('anytime_home') ?>
     
@@ -359,7 +360,7 @@ $this->disableAutoLayout();
             <!-- Trainer 4 -->
             <div class="trainer-card">
                 <div style="overflow: hidden; border-bottom: 3px solid var(--primary);">
-                    <?= $this->Html->image('trainer_4.png', ['alt' => 'Trainer 4', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; display: block;']) ?>
+                    <?= $this->Html->image('trainer_4.png?v=1', ['alt' => 'Trainer 4', 'style' => 'width: 100%; height: 350px; object-fit: cover; object-position: top; display: block;']) ?>
                 </div>
                 <h3 style="margin: 20px 0 5px; font-size: 24px;">Megat Naufal</h3>
                 <p style="color: var(--secondary); font-weight: 600; margin-bottom: 15px;">Muscle Building & Body Recomposition Coach</p>

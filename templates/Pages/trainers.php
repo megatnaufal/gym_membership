@@ -7,6 +7,7 @@ $this->disableAutoLayout();
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Our Trainers - Anytime Fitness</title>
+    <link rel="icon" type="image/x-icon" href="<?= $this->Url->assetUrl('favicon.ico?v=' . time()) ?>">
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <?= $this->Html->css(['anytime_home']) ?>
@@ -211,7 +212,7 @@ $this->disableAutoLayout();
             <!-- Trainer 4 -->
             <div class="trainer-card reveal" style="transition-delay: 0.3s;">
                 <div class="trainer-img-wrapper">
-                    <?= $this->Html->image('trainer_4.png', ['alt' => 'Trainer 4']) ?>
+                    <?= $this->Html->image('trainer_4.png?v=1', ['alt' => 'Trainer 4']) ?>
                     <div class="trainer-socials">
                         <a href="#"><i class="ph ph-instagram-logo"></i></a>
                         <a href="#"><i class="ph ph-tiktok-logo"></i></a>
